@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { loadProducts } from "../../actions/product";
 // Components
 import ProductList from "./ProductList";
+import Plot from "./Plot";
 
 const Dashboard = ({ auth, product, loadProducts }) => {
   useEffect(() => {
@@ -13,7 +14,11 @@ const Dashboard = ({ auth, product, loadProducts }) => {
   return (
     <Fragment>
       <section className='workarea'>
-        <ProductList products={product.products} productsInView={product.productsInView} />
+        <ProductList
+          products={product.products}
+          productsInView={product.productsInView}
+        />
+        <Plot />
       </section>
     </Fragment>
   );
