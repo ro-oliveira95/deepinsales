@@ -2,7 +2,13 @@ const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
-const pg = require("pg");
+const { Sequelize } = require("sequelize");
+
+// load env vars
+dotenv.config({ path: "./config/config.env" });
+
+// const pg = require("pg");
+const { User } = require("./db/models");
 
 const app = express();
 
@@ -16,9 +22,6 @@ app.use(cookieParser());
 const auth = require("./routes/auth");
 const users = require("./routes/users");
 const products = require("./routes/products");
-
-// load env vars
-dotenv.config({ path: "./config/config.env" });
 
 // mount routes
 app.use("/api/auth", auth);

@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { sendTokenResponse } = require("../utils/authUtils");
-const db = require("../config/db");
+const { User } = require("../db/models");
 
 exports.register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -18,19 +18,15 @@ exports.register = async (req, res, next) => {
   const password_hash = await bcrypt.hash(password, salt);
 
   try {
-    // insert new user to db
-    await db.query(
-      "INSERT INTO users (name, email, password) VALUES ($1, $2, $3);",
-      [name, email, password_hash]
-    );
-    // retrieve user to extract its id
-    const query = await db.query("SELECT _id FROM users WHERE email = $1;", [
+    const user = await User.create({
+      name,
       email,
-    ]);
-    const user = query.rows[0];
-    // send response with token
-    sendTokenResponse(user._id, 200, res);
+      password: password_hash,
+    });
+    const id = user.dataValues.id;
+    sendTokenResponse(id, 200, res);
   } catch (err) {
+    console.log(err);
     // default error message
     let message = "Falha no registro. Por favor, tente mais tarde";
     // duplicate error message

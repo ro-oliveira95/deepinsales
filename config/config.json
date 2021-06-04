@@ -1,0 +1,12 @@
+{
+  "development": {
+    "username": "rodrigo",
+    "password": "f0da-se123",
+    "database": "deepinsale-db",
+    "host": "/var/run/postgresql",
+    "port": 5432,
+    "dialect": "postgres"
+  }
+}
+
+

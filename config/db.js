@@ -7,6 +7,13 @@ const pool = new Pool({
   database: process.env.DB_NAME,
 });
 
+// const pool = new Pool({
+//   host: "/var/run/postgresql",
+//   user: "rodrigo",
+//   password: "f0da-se123",
+//   database: "deepinsale-db",
+// });
+
 module.exports = {
   query: async (text, params, callback) => {
     const res = await pool.query(text, params, callback);

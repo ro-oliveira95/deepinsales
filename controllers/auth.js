@@ -1,17 +1,20 @@
 const { matchPassword, sendTokenResponse } = require("../utils/authUtils");
-const db = require("../config/db");
+const { User } = require("../db/models");
 
 exports.getUserByToken = async (req, res) => {
   try {
-    // req.user = await User.findById(decoded.id);
-    const query = await db.query(
-      "SELECT _id, name, email FROM users WHERE _id = $1",
-      [req.user_id]
-    );
-    const user = query.rows[0];
+    const userList = await User.findAll({
+      attributes: { exclude: ["password"] },
+      where: {
+        id: req.user_id,
+      },
+    });
+    const user = userList[0].dataValues;
     res.json(user);
   } catch (err) {
-    res.status(500).send({ errors: [{ msg: "Erro no servidor" }] });
+    res.status(500).send({
+      errors: [{ msg: "Erro no servidor. Por favor, tente mais tarde" }],
+    });
   }
 };
 
@@ -26,24 +29,35 @@ exports.login = async (req, res, next) => {
     return;
   }
 
-  // quering from db
-  const query = await db.query("SELECT * FROM users WHERE email = $1", [email]);
+  try {
+    // quering users from db
+    const userList = await User.findAll({
+      where: {
+        email,
+      },
+    });
 
-  // checking email matching
-  if (query.rowCount == 0) {
-    res.status(400).json({ errors: [{ message: "Credenciais inválidas" }] });
-    return;
+    // checking if user exists
+    if (userList.length == 0) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: "Credenciais inválidas" }] });
+    }
+    const user = userList[0].dataValues;
+
+    // checking password matching
+    const isPasswordMatch = await matchPassword(password, user.password);
+    if (!isPasswordMatch) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: "Credenciais inválidas" }] });
+    }
+
+    // sending response
+    sendTokenResponse(user.id, 200, res);
+  } catch (err) {
+    return res.status(500).json({
+      errors: [{ message: "Erro no servidor. Por favor, tente mais tarde" }],
+    });
   }
-
-  const user = query.rows[0];
-
-  // checking password matching
-  const isPasswordMatch = await matchPassword(password, user.password);
-  if (!isPasswordMatch) {
-    res.status(400).json({ errors: [{ message: "Credenciais inválidas" }] });
-    return;
-  }
-
-  // sending response
-  sendTokenResponse(user._id, 200, res);
 };

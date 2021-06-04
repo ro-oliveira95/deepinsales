@@ -18,7 +18,7 @@ const Dashboard = ({ auth, product, loadProducts }) => {
           products={product.products}
           productsInView={product.productsInView}
         />
-        <Plot />
+        {/* <Plot /> */}
       </section>
     </Fragment>
   );
