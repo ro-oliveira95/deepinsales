@@ -1,9 +1,18 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { addPlotItem } from "../../actions/plot";
 
 import "./product.css";
 
-const Product = ({ product }) => {
+const Product = ({ product, addPlotItem, plot }) => {
   const [isHintShown, setIsHintShown] = useState(false);
+  const [isPloted, setisPloted] = useState(["t1", "t2"]);
+
+  useEffect(() => {
+    console.log(plot.plotItems);
+    addPlotItem(plot.plotItems, product.name);
+  }, [addPlotItem]);
+
   const categoriesList = product.category.map((category, index) => (
     <div
       className='categories-tag'
@@ -76,4 +85,8 @@ const Product = ({ product }) => {
   return <Fragment>{listView}</Fragment>;
 };
 
-export default Product;
+const mapStateToProps = (state) => ({
+  plot: state.plot,
+});
+
+export default connect(mapStateToProps, { addPlotItem })(Product);

@@ -38,7 +38,9 @@ function Navbar({ auth: { isAuthenticated, loading }, logout }) {
           <h3>Deep in Sales</h3>
         </Link>
       ) : (
-        <img src={logo} alt='logo' className='logo-m' />
+        <Fragment>
+          <img src={logo} alt='logo' className='logo-m' />
+        </Fragment>
       )}
 
       {!loading && (

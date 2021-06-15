@@ -1,7 +1,14 @@
+const uuid = require("uuid/v4");
+const { User, SalesRecord } = require("./");
+
 module.exports = (sequelize, DataTypes) => {
   const Product = sequelize.define(
     "Product",
     {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+      },
       name: {
         type: DataTypes.TEXT,
         allowNull: false,
@@ -57,7 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       user_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: {
@@ -70,6 +77,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     { tableName: "products" }
   );
+
+  Product.beforeCreate((product) => (product.id = uuid()));
+
+  Product.associate = function (models) {
+    Product.belongsTo(models.User, { foreignKey: "user_id" });
+    Product.hasMany(models.SaleRecord, { foreignKey: "product_id", as: 'records' });
+  };
 
   return Product;
 };

@@ -41,7 +41,7 @@ function AddProductForm({ addProduct }) {
       <h1>Adicione um produto</h1>
       <Alert />
       <form className='add-form' onSubmit={onSubmit} onKeyDown={onKeyPressed}>
-        <div className='form-control'>
+        <div className='form-control text-light'>
           <label>Nome (opcional)</label>
           <input
             type='text'
@@ -50,7 +50,7 @@ function AddProductForm({ addProduct }) {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <div className='form-control'>
+        <div className='form-control text-light'>
           <label>URL (obrigatório)</label>
           <input
             type='text'
@@ -61,7 +61,7 @@ function AddProductForm({ addProduct }) {
           />
         </div>
 
-        <div className='form-control'>
+        <div className='form-control text-light'>
           <label>Categoria(s)</label>
           <InputCategories tags={categories} setTags={setCategories} />
         </div>

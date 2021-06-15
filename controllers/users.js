@@ -23,7 +23,7 @@ exports.register = async (req, res, next) => {
       email,
       password: password_hash,
     });
-    const id = user.dataValues.id;
+    const id = user.id;
     sendTokenResponse(id, 200, res);
   } catch (err) {
     console.log(err);

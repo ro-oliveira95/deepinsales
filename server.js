@@ -4,6 +4,9 @@ const colors = require("colors");
 const cookieParser = require("cookie-parser");
 const { Sequelize } = require("sequelize");
 
+// utils
+const { createRecord } = require("./utils/records");
+
 // load env vars
 dotenv.config({ path: "./config/config.env" });
 
@@ -22,11 +25,15 @@ app.use(cookieParser());
 const auth = require("./routes/auth");
 const users = require("./routes/users");
 const products = require("./routes/products");
+const records = require("./routes/records");
 
 // mount routes
 app.use("/api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/products", products);
+app.use("/api/records", records);
+
+// createRecord();
 
 const PORT = process.env.PORT || 5000;
 

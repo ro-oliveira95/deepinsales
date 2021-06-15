@@ -17,14 +17,12 @@ export const loadUser = () => async (dispatch) => {
   }
 
   try {
-    console.log("CCCCCC");
     const res = await axios.get("/api/auth");
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
   } catch (err) {
-    console.log("DDDDD");
     dispatch({
       type: AUTH_ERROR,
     });
@@ -76,23 +74,19 @@ export const login =
     const body = JSON.stringify({ email, password });
 
     try {
-      console.log("A1");
       const res = await axios.post("/api/auth", body, config);
-      console.log("A2");
       dispatch({
         type: LOGIN_SUCCESS,
         payload: res.data,
       });
-      console.log("A3");
-      // dispatch(loadUser());
+      dispatch(loadUser());
     } catch (err) {
-      console.log("BBBBBB");
       console.log(err);
-      // const errors = err.response.data.errors;
+      const errors = err.response.data.errors;
 
-      // if (errors) {
-      //   errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
-      // }
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
+      }
 
       dispatch({
         type: LOGIN_FAIL,

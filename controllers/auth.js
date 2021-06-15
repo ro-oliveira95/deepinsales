@@ -3,17 +3,16 @@ const { User } = require("../db/models");
 
 exports.getUserByToken = async (req, res) => {
   try {
-    const userList = await User.findAll({
+    const user = await User.findAll({
       attributes: { exclude: ["password"] },
       where: {
         id: req.user_id,
       },
     });
-    const user = userList[0].dataValues;
     res.json(user);
   } catch (err) {
     res.status(500).send({
-      errors: [{ msg: "Erro no servidor. Por favor, tente mais tarde" }],
+      errors: [{ message: "Erro no servidor. Por favor, tente mais tarde" }],
     });
   }
 };
@@ -43,7 +42,12 @@ exports.login = async (req, res, next) => {
         .status(400)
         .json({ errors: [{ message: "Credenciais inválidas" }] });
     }
-    const user = userList[0].dataValues;
+    const user = userList[0];
+    if (!user) {
+      return res
+        .status(400)
+        .json({ errors: [{ message: "Credenciais inválidas" }] });
+    }
 
     // checking password matching
     const isPasswordMatch = await matchPassword(password, user.password);

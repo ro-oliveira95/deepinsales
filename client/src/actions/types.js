@@ -12,3 +12,6 @@ export const QUERY_PRODUCTS = "QUERY_PRODUCTS";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const ERROR_ADD_PRODUCT = "ERROR_ADD_PRODUCT";
 export const PRODUCTS_ERROR = "PRODUCTS_ERROR";
+export const GET_RECORDS = "GET_RECORDS";
+export const RECORDS_ERROR = "RECORDS_ERROR";
+export const GET_PLOT_ITEMS = "GET_PLOT_ITEMS";

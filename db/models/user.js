@@ -27,5 +27,9 @@ module.exports = (sequelize, DataTypes) => {
 
   User.beforeCreate((user) => (user.id = uuid()));
 
+  User.associate = function (models) {
+    User.hasMany(models.Product, { foreignKey: "user_id" });
+  };
+
   return User;
 };

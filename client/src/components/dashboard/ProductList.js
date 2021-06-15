@@ -43,7 +43,7 @@ function ProductList({ queryProducts, products, productsInView }) {
   };
 
   const productList = productsInView.map((product) => (
-    <Product key={product._id} product={product} />
+    <Product key={product.id} product={product} />
   ));
   const datepickerWindow = (
     <Fragment>
@@ -106,8 +106,9 @@ function ProductList({ queryProducts, products, productsInView }) {
             <div className='dummy'>{isAddProduct && <AddProductForm />}</div>
           </div>
         </div>
-        <div className='products-body'>
-          <ul>{productList}</ul>
+        <div className='products-body' style={{ overflowY: "auto" }}>
+          {/* <ul>{productList}</ul> */}
+          {productList}
         </div>
       </section>
     </Fragment>

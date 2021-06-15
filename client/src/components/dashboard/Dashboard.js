@@ -1,38 +1,45 @@
 import PropTypes from "prop-types";
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { loadProducts } from "../../actions/product";
+import { loadRecords } from "../../actions/record";
 // Components
 import ProductList from "./ProductList";
 import Plot from "./Plot";
 
-const Dashboard = ({ auth, product, loadProducts }) => {
+const Dashboard = ({ product, records, loadProducts, loadRecords }) => {
   useEffect(() => {
     loadProducts();
-  }, []);
+    loadRecords();
+  }, [loadProducts, loadRecords]);
 
   return (
     <Fragment>
-      <section className='workarea'>
+      <div className='workarea'>
         <ProductList
           products={product.products}
           productsInView={product.productsInView}
         />
-        {/* <Plot /> */}
-      </section>
+        {/* {!records.loading && <Plot records={records.records} redraw={true} />} */}
+        <Plot records={records.records} redraw={true} />
+      </div>
     </Fragment>
   );
 };
 
 Dashboard.propTypes = {
-  auth: PropTypes.object.isRequired,
   product: PropTypes.object.isRequired,
+  records: PropTypes.object.isRequired,
   loadProducts: PropTypes.func.isRequired,
+  loadRecords: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  auth: state.auth,
   product: state.product,
+  records: state.records,
 });
 
-export default connect(mapStateToProps, { loadProducts })(Dashboard);
+export default connect(mapStateToProps, {
+  loadProducts,
+  loadRecords,
+})(Dashboard);

@@ -1,7 +1,13 @@
+const uuid = require("uuid/v4");
+
 module.exports = (sequelize, DataTypes) => {
   const SaleRecord = sequelize.define(
     "SaleRecord",
     {
+      id: {
+        type: DataTypes.UUID,
+        primaryKey: true,
+      },
       total_sells: {
         type: DataTypes.INTEGER,
       },
@@ -33,6 +39,12 @@ module.exports = (sequelize, DataTypes) => {
       createdAt: "timestamp",
     }
   );
+
+  SaleRecord.beforeCreate((user) => (user.id = uuid()));
+
+  SaleRecord.associate = function (models) {
+    SaleRecord.belongsTo(models.Product, { foreignKey: "product_id" });
+  };
 
   return SaleRecord;
 };
