@@ -4,8 +4,11 @@ import PropTypes from "prop-types";
 import { queryProducts } from "../../actions/product";
 import Product from "./Product";
 import AddProductForm from "./AddProductForm";
+import Alert from "../layout/Alert";
 
-function ProductList({ queryProducts, products, productsInView }) {
+import { CommonLoading } from "react-loadingg";
+
+function ProductList({ queryProducts, products, productsInView, loading }) {
   const [datepicker, setDatepicker] = useState(false);
   const [isAddProduct, setIsAddProduct] = useState(false);
   const [queryParams, setQueryParams] = useState([
@@ -26,6 +29,10 @@ function ProductList({ queryProducts, products, productsInView }) {
     setIsAddProduct(!isAddProduct);
   };
 
+  const onAddProduct = () => {
+    setIsAddProduct(false);
+  };
+
   const applyDateFilter = (e) => {
     e.preventDefault();
   };
@@ -42,9 +49,20 @@ function ProductList({ queryProducts, products, productsInView }) {
     }
   };
 
-  const productList = productsInView.map((product) => (
-    <Product key={product.id} product={product} />
-  ));
+  const productList = productsInView
+    // sorting in order of insertion (most recent first)
+    .sort(function (a, b) {
+      let dateA = a.createdAt;
+      let dateB = b.createdAt;
+      if (dateA > dateB) {
+        return -1;
+      } else if (dateA < dateB) {
+        return 1;
+      }
+      return 0;
+    })
+    // creating product cards
+    .map((product) => <Product key={product.id} product={product} />);
   const datepickerWindow = (
     <Fragment>
       <form id='filter-date' onSubmit={(e) => applyDateFilter(e)}></form>
@@ -86,7 +104,7 @@ function ProductList({ queryProducts, products, productsInView }) {
           <div className='form-products'>
             <i className='fas fa-filter icon icon-btn icon-15x'></i>
             <i
-              className='fas fa-calendar-alt icon icon-btn icon-15x datepicker-btn'
+              className='fas fa-calendar-alt icon icon-btn icon-15x pop-window-btn'
               onClick={() => toggleDatepicker()}
             ></i>
             <div className='dummy'>{datepicker && datepickerWindow}</div>
@@ -100,14 +118,22 @@ function ProductList({ queryProducts, products, productsInView }) {
               onChange={(e) => onChange(e)}
             />
             <i
-              className='fas fa-plus-square btn-add-product icon-btn icon-2x addProduct-btn'
+              className='fas fa-plus-square icon-btn icon-2x add-product-btn'
               onClick={() => toggleAddProductForm()}
             ></i>
-            <div className='dummy'>{isAddProduct && <AddProductForm />}</div>
+            <div className='dummy'>
+              {isAddProduct && <AddProductForm onAddProduct={onAddProduct} />}
+            </div>
           </div>
         </div>
         <div className='products-body' style={{ overflowY: "auto" }}>
           {/* <ul>{productList}</ul> */}
+          {loading && (
+            <Fragment>
+              <CommonLoading />
+            </Fragment>
+          )}
+          <Alert />
           {productList}
         </div>
       </section>

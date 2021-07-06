@@ -4,6 +4,7 @@ import {
   QUERY_PRODUCTS,
   ADD_PRODUCT,
   ERROR_ADD_PRODUCT,
+  LOADING_PRODUCT,
 } from "../actions/types";
 
 const initialState = {
@@ -43,6 +44,11 @@ function productReducer(state = initialState, action) {
         loading: false,
         products: [],
         productsInView: [],
+      };
+    case LOADING_PRODUCT:
+      return {
+        ...state,
+        loading: true,
       };
     default:
       return state;

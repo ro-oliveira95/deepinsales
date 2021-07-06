@@ -37,19 +37,13 @@ const InputCategories = ({ tags, setTags }) => {
       <input
         id='categoryInput'
         type='text'
-        placeholder='Enter category (Press TAB to add)'
+        placeholder='Categoria (TAB para adicionar)'
         onKeyDown={onPressed}
         ref={tagInput}
       />
       <ul className='tag-container'>
         {tags.map((tag, i) => (
-          <li
-            key={tag.name}
-            className='tag'
-            // style={{
-            //   backgroundColor: tag.rgb,
-            // }}
-          >
+          <li key={tag.name} className='tag'>
             {tag.name}
             <FaTimes onClick={() => deleteTag(i)} className='tag-delete' />
           </li>

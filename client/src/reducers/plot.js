@@ -1,4 +1,4 @@
-import { GET_PLOT_ITEMS } from "../actions/types";
+import { TOGGLE_PLOT_ITEM } from "../actions/types";
 
 const initialState = {
   plotItems: [],
@@ -8,7 +8,7 @@ function plotReducer(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_PLOT_ITEMS:
+    case TOGGLE_PLOT_ITEM:
       return {
         ...state,
         plotItems: payload,

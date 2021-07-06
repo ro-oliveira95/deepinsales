@@ -1,13 +1,16 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-luxon";
 import { DateTime as dt } from "luxon";
+import { loadRecords } from "../../actions/record";
 
-function Plot({ records }) {
-  // console.log(records);
+function Plot({ records, plot }) {
   const data = {
     datasets: records
+      .filter((saleRecord) => {
+        return plot.plotItems.includes(saleRecord.productId);
+      })
       .filter((saleRecord) => {
         return saleRecord.record.length > 0;
       })
@@ -15,112 +18,45 @@ function Plot({ records }) {
         return {
           label: saleRecord.productName,
           data: saleRecord.record.map((value) => {
-            // return { x: dt.fromISO(value.timestamp), y: value.total_sells };
             return { x: value.timestamp, y: value.total_sells };
           }),
           fill: false,
-          backgroundColor: `rgb(${Math.floor(
-            Math.random() * 255
-          )}, ${Math.floor(Math.random() * 255)}, ${Math.floor(
-            Math.random() * 255
-          )})`,
-          borderColor: `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(
-            Math.random() * 255
-          )}, ${Math.floor(Math.random() * 255)}, 0.2)`,
+          backgroundColor: `rgb(${saleRecord.color[0]}, ${saleRecord.color[1]}, ${saleRecord.color[2]})`,
+          borderColor: `rgb(${saleRecord.color[0]}, ${saleRecord.color[1]}, ${saleRecord.color[2]}, 0.2)`,
           tension: 0.2,
         };
       }),
-    // datasets: [
-    //   {
-    //     // label: records[2].productName,
-    //     // data: records[2].record.map((value) => {
-    //     //   return { x: value.timestamp, y: value.total_sells };
-    //     // }),
-    //     label: "test",
-    //     data: [
-    //       { x: 1, y: 1 },
-    //       { x: 2, y: 3 },
-    //       { x: 3, y: 6 },
-    //     ],
-    //     fill: false,
-    //     backgroundColor: "rgb(255, 99, 132)",
-    //     borderColor: "rgba(255, 99, 132, 0.2)",
-    //   },
-    // ],
   };
 
-  const options = {
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-      x: [
-        {
-          type: "time",
-          time: {
-            // unit: "day",
-            // displayFormats: {
-            //   day: "DD/MM hha",
-            // },
-            tooltipFormat: "DD T",
-          },
-        },
-      ],
-    },
-  };
   return (
     <Fragment>
       <section className='container-plot'>
         <Line
           data={data}
-          options={options}
           height={150}
           options={{
             responsive: true,
             maintainAspectRatio: false,
-            legend: {
-              display: false,
-            },
             scales: {
-              yAxes: [
-                {
-                  position: "left",
-                  id: "y-axis-0",
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                  scaleLabel: {
-                    display: true,
-                    labelString: "Acumuladas",
+              y: {
+                position: "left",
+                title: {
+                  display: true,
+                  text: "Vendas acumuladas",
+                  font: {
+                    size: 16,
                   },
                 },
-                {
-                  position: "right",
-                  id: "y-axis-1",
-                  ticks: {
-                    beginAtZero: true,
-                  },
-                  scaleLabel: {
-                    display: true,
-                    labelString: "Diárias",
-                  },
-                },
-              ],
-              xAxes: [
-                {
-                  type: "time",
-                  time: {
-                    unit: "day",
-                    displayFormats: {
-                      day: "DD/MM hha",
-                    },
-                  },
-                },
-              ],
+              },
+              x: {
+                type: "time",
+                // time: {
+                //   unit: "day",
+                //   displayFormats: {
+                //     day: "DD",
+                //   },
+                // },
+              },
             },
           }}
         />
@@ -129,4 +65,9 @@ function Plot({ records }) {
   );
 }
 
-export default Plot;
+const mapStateToProps = (state) => ({
+  plot: state.plot,
+});
+
+export default connect(mapStateToProps)(Plot);
+// export default Plot;

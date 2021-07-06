@@ -3,9 +3,8 @@ import { connect } from "react-redux";
 import { addProduct } from "../../actions/product";
 import PropTypes from "prop-types";
 import InputCategories from "./InputCategories";
-import Alert from "../layout/Alert";
 
-function AddProductForm({ addProduct }) {
+function AddProductForm({ addProduct, onAddProduct }) {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
   const [categories, setCategories] = useState([]);
@@ -27,20 +26,30 @@ function AddProductForm({ addProduct }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    console.log(categories);
-
     addProduct({ name, url, categories });
 
     setName("");
     setUrl("");
     setCategories([]);
+
+    onAddProduct();
   };
 
   return (
     <div className='addProduct-container'>
       <h1>Adicione um produto</h1>
-      <Alert />
+
       <form className='add-form' onSubmit={onSubmit} onKeyDown={onKeyPressed}>
+        <div className='form-control text-light'>
+          <label>URL do anúncio</label>
+          <input
+            type='url'
+            placeholder='URL do anúncio'
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+          />
+        </div>
         <div className='form-control text-light'>
           <label>Nome (opcional)</label>
           <input
@@ -48,16 +57,6 @@ function AddProductForm({ addProduct }) {
             placeholder='Nome do produto'
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className='form-control text-light'>
-          <label>URL (obrigatório)</label>
-          <input
-            type='text'
-            placeholder='URL do anúncio'
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
           />
         </div>
 

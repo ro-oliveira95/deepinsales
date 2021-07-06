@@ -1,17 +1,21 @@
 const express = require("express");
+const path = require("path");
 const dotenv = require("dotenv");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
 const { Sequelize } = require("sequelize");
+const cron = require("node-cron");
+
+const { refreshMLToken } = require("./utils/mlAPI");
 
 // utils
-const { createRecord } = require("./utils/records");
+const {
+  recordAllProducts,
+  updateCatalogueProducts,
+} = require("./utils/dailyRoutines");
 
 // load env vars
 dotenv.config({ path: "./config/config.env" });
-
-// const pg = require("pg");
-const { User } = require("./db/models");
 
 const app = express();
 
@@ -33,7 +37,36 @@ app.use("/api/users", users);
 app.use("/api/products", products);
 app.use("/api/records", records);
 
-// createRecord();
+// (async () => {
+//   await refreshMLToken(); // each 5h30
+//   await updateCatalogueProducts(); // before recording products
+//   await recordAllProducts(); // each 24h
+// })();
+
+// scheduling token refreashing
+cron.schedule("0 */5 * * *", () => {
+  d = new Date();
+  console.log(`[${d.toGMTString()}] refresing ML token...`);
+  refreshMLToken();
+});
+
+// scheduling record making
+cron.schedule("0 */6 * * *", async () => {
+  d = new Date();
+  console.log(`[${d.toGMTString()}] recording all products...`);
+  await updateCatalogueProducts(); // before recording products
+  await recordAllProducts(); // each 24h
+});
+
+// serve static assets in production
+if (process.env.NODE_ENV == "production") {
+  // set static folder
+  app.use(express.static("client/build"));
+  // create generic route
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 

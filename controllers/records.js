@@ -46,7 +46,12 @@ exports.getAllRecordsFromUser = async (req, res, next) => {
     for (let product of products) {
       const record = await product.getRecords();
       const productId = product.id;
-      records.push({ productName: product.name, productId, record });
+      records.push({
+        productName: product.name,
+        productId,
+        record,
+        color: product.rgb,
+      });
       // records[productId] = record;
     }
     res.status(200).json({ records });

@@ -5,8 +5,10 @@ import {
   QUERY_PRODUCTS,
   ADD_PRODUCT,
   ERROR_ADD_PRODUCT,
+  LOADING_PRODUCT,
 } from "./types";
 import { setAlert } from "./alert";
+import { loadRecords } from "./record";
 
 export const loadProducts = () => async (dispatch) => {
   try {
@@ -23,32 +25,38 @@ export const loadProducts = () => async (dispatch) => {
   }
 };
 
-export const addProduct = ({ name, url, categories }) => async (dispatch) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
+export const addProduct =
+  ({ name, url, categories }) =>
+  async (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  const body = JSON.stringify({ name, url, categories });
-  try {
-    const res = await axios.post("/api/products", body, config);
-    dispatch({
-      type: ADD_PRODUCT,
-      payload: res.data.product,
-    });
-    dispatch(loadProducts());
-  } catch (err) {
-    const errors = err.response.data.errors;
+    const body = JSON.stringify({ name, url, categories });
+    try {
+      dispatch({
+        type: LOADING_PRODUCT,
+      });
+      const res = await axios.post("/api/products", body, config);
+      dispatch({
+        type: ADD_PRODUCT,
+        payload: res.data.product,
+      });
+      dispatch(loadProducts());
+      dispatch(loadRecords());
+    } catch (err) {
+      const errors = err.response.data.errors;
 
-    if (errors) {
-      errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
+      }
+      dispatch({
+        type: ERROR_ADD_PRODUCT,
+      });
     }
-    dispatch({
-      type: ERROR_ADD_PRODUCT,
-    });
-  }
-};
+  };
 
 // export const queryProducts = ({ dateIni, dateEnd, productName }) => async (
 //   dispatch

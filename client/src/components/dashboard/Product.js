@@ -1,17 +1,60 @@
 import { Fragment, useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { addPlotItem } from "../../actions/plot";
+import { togglePlotItem } from "../../actions/plot";
 
 import "./product.css";
 
-const Product = ({ product, addPlotItem, plot }) => {
-  const [isHintShown, setIsHintShown] = useState(false);
-  const [isPloted, setisPloted] = useState(["t1", "t2"]);
+const Product = ({ product, togglePlotItem, plot }) => {
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [configParams, setConfigParams] = useState({ name: "" });
+  const [isPloted, setisPloted] = useState(false);
+
+  const { name } = configParams;
 
   useEffect(() => {
-    console.log(plot.plotItems);
-    addPlotItem(plot.plotItems, product.name);
-  }, [addPlotItem]);
+    plot.plotItems.includes(product.id)
+      ? setisPloted(true)
+      : setisPloted(false);
+  }, [plot, product]);
+
+  const toggleConfigPopup = () => {
+    setIsConfigOpen(!isConfigOpen);
+  };
+
+  const onChange = (e) => {
+    setConfigParams({ ...configParams, [e.target.name]: e.target.value });
+  };
+
+  const toggleItemVisibility = (product) => {
+    setisPloted(!isPloted);
+    togglePlotItem(plot.plotItems, product.id, !isPloted);
+  };
+
+  const saveConfig = (e) => {
+    e.preventDefault();
+  };
+
+  const configPopup = (
+    <Fragment>
+      <form id='config-form' onSubmit={(e) => saveConfig(e)}></form>
+      <div className='config-container' onSubmit={(e) => saveConfig(e)}>
+        <p>Configurações</p>
+        <input
+          type='text'
+          form='config-form'
+          name='name'
+          value={name}
+          onChange={(e) => onChange(e)}
+        />
+        <input
+          type='submit'
+          className='btn btn-success'
+          value='Salvar'
+          form='config-form'
+        />
+      </div>
+    </Fragment>
+  );
 
   const categoriesList = product.category.map((category, index) => (
     <div
@@ -23,60 +66,69 @@ const Product = ({ product, addPlotItem, plot }) => {
       key={index}
     >
       {category.name}
+      {isConfigOpen && <i className='fas fa-times-circle icon'></i>}
     </div>
   ));
-  const showHint = (
-    <div className='info-hint'>
-      <p>teste</p>
-    </div>
+  const itemInfoContent = (
+    <Fragment>
+      <div>
+        <p>R${product.price}</p>
+        <p className='text-s dp'>{product.seller}</p>
+      </div>
+      <div>
+        <i className='fas fa-eye icon icon-light'>
+          <p className='info-icon-text'>{product.curr_total_visits}</p>
+        </i>
+      </div>
+      <div>
+        <i className='fas fa-shopping-cart icon icon-light'>
+          <p className='info-icon-text'>{product.curr_total_sells}</p>
+        </i>
+      </div>
+      <div>
+        <i className='fas fa-sync-alt icon icon-light'>
+          <p className='info-icon-text'>{product.conversion_rate.toFixed(2)}</p>
+        </i>
+      </div>
+    </Fragment>
   );
+
+  const itemConfigContent = (
+    <Fragment>
+      <div>
+        <i className='fas fa-trash-alt icon icon-btn'></i>
+        Deletar
+      </div>
+    </Fragment>
+  );
+
   const listView = (
-    <div className='item-container'>
+    <div className={`item-container ${isPloted ? "border-glow" : ""}`}>
       <img src={product.image_url} alt='produto' />
       <div className='item-outer'>
         <div className='item-header'>
-          <i
-            className='fas fa-info-circle hint-hover'
-            onMouseEnter={() => setIsHintShown(true)}
-            onMouseLeave={() => setIsHintShown(false)}
-          >
-            {isHintShown && (
-              <div className='info-hint'>
-                {/* <i className='fas fa-dollar-sign icon'>{product.price}</i> */}
-                <p className='dp'>
-                  <span className='text-strong'>Preço</span> R${product.price}
-                </p>
-                <p className='text-s dp'>{product.seller}</p>
-              </div>
-            )}
-          </i>
+          <div className='icons-header-container'>
+            <i className='fas fa-angle-double-left icon icon-btn icon-header-product'></i>
+            <i
+              className={`fas fa-cog icon icon-btn icon-header-product ${
+                isConfigOpen ? "btn-icon-glow-green" : ""
+              }`}
+              onClick={() => toggleConfigPopup(product.name)}
+            ></i>
+          </div>
+          {/* <div className='dummy'>{isConfigOpen && configPopup}</div> */}
           <p className='item-title'>{product.name}</p>
-          <i className='fas fa-angle-double-right icon icon-btn'></i>
+          <i
+            className={`fas fa-chart-bar icon icon-btn icon-header-product ${
+              isPloted ? "btn-icon-glow" : ""
+            }`}
+            onClick={() => toggleItemVisibility(product)}
+          ></i>
         </div>
         <div className='categories-box'>{categoriesList}</div>
 
         <div className='item-inner'>
-          <div className='infobox'>
-            <div>
-              <i className='fas fa-eye icon icon-light'>
-                <p className='info-icon-text'>400</p>
-              </i>
-            </div>
-            <div>
-              <i className='fas fa-shopping-cart icon icon-light'>
-                <p className='info-icon-text'>100</p>
-              </i>
-            </div>
-            <div>
-              <i className='fas fa-sync-alt icon icon-light'>
-                <p className='info-icon-text'>0.3</p>
-              </i>
-            </div>
-          </div>
-          <div className='actions'>
-            <i className='fas fa-cog icon icon-btn icon-15x'></i>
-            <i className='fas fa-chart-bar icon icon-btn icon-15x'></i>
-          </div>
+          {isConfigOpen ? itemConfigContent : itemInfoContent}
         </div>
         {/* </div> */}
       </div>
@@ -89,4 +141,4 @@ const mapStateToProps = (state) => ({
   plot: state.plot,
 });
 
-export default connect(mapStateToProps, { addPlotItem })(Product);
+export default connect(mapStateToProps, { togglePlotItem })(Product);

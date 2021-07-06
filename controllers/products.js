@@ -1,65 +1,64 @@
 const { Product } = require("../db/models");
+const { getImageURL, readSellsOnMlPage } = require("../utils/scrapers");
+const { gatherProductSellsAndCreateRecord } = require("../utils/dailyRoutines");
+const {
+  getVisits,
+  getProductIdsFromML,
+  getProductInfoFromML,
+  getSellerNicknameFromML,
+} = require("../utils/mlAPI");
 
-exports.createProduct = async (req, res, next) => {
+exports.createProduct = async (req, res) => {
   const userId = req.user_id;
   let { name, url, categories } = req.body;
-
-  if (!name) {
-    name = "generic name";
+  const { mlID, catalogueID, isBuybox } = await getProductIdsFromML(url);
+  // url not valid (from MercadoLivre)
+  if (!mlID) {
+    return res.status(400).json({ errors: [{ message: "URL inválido." }] });
   }
+  const { title, seller_id, price, status, permalink, secure_thumbnail } =
+    await getProductInfoFromML(mlID);
+  const seller = await getSellerNicknameFromML(seller_id);
 
-  const info = {
-    created_at: new Date(
-      Date.now() + 1000 * 60 * -new Date().getTimezoneOffset()
-    ).toISOString(),
-    user_id: userId,
-    image_url:
-      "https://http2.mlstatic.com/D_NQ_NP_831095-MLB45158647951_032021-V.webp",
-    status: "active",
-    rgb: [
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255),
-      Math.floor(Math.random() * 255),
-    ],
-    category: categories,
-    seller: "DIS digital",
-    price: 192.9,
-    isBuybox: false,
-    catalogue_id: "",
-    ml_id: "ML1234",
-    curr_total_sells: 50,
-    curr_total_visits: 100,
-    conversion_rate: 0.5,
-    is_buy_box: false,
-  };
+  const productName = name || title;
+
+  const sells = await readSellsOnMlPage(url);
+  let visits = await getVisits(mlID);
+  visits = visits[mlID];
 
   try {
-    let product = await Product.create({
-      name,
-      url,
-      user_id: info._user_id,
-      image_url: info.image_url,
-      status: info.status,
-      rgb: info.rgb,
-      category: info.category,
-      seller: info.seller,
-      price: info.price,
-      isBuybox: info.isBuybox,
-      catalogue_id: info.catalogue_id,
-      ml_id: info.ml_id,
-      curr_total_sells: info.curr_total_sells,
-      curr_total_visits: info.curr_total_visits,
-      conversion_rate: info.conversion_rate,
-      is_buy_box: info.is_buy_box,
-      user_id: info.user_id,
+    const product = await Product.create({
+      name: productName,
+      url: permalink,
+      user_id: userId,
+      image_url: secure_thumbnail,
+      status,
+      rgb: [
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+        Math.floor(Math.random() * 255),
+      ],
+      category: categories,
+      seller,
+      price,
+      catalogue_id: catalogueID,
+      ml_id: mlID,
+      curr_total_sells: sells,
+      curr_total_visits: visits,
+      conversion_rate: sells / visits,
+      is_buy_box: isBuybox,
+      user_id: userId,
     });
+    await gatherProductSellsAndCreateRecord(product);
+
     return res.status(200).json({ sucess: true, product });
   } catch (err) {
+    // console.log(err);
     return res.status(400).json({ errors: [{ message: "Erro no servidor" }] });
   }
 };
 
-exports.getProducts = async (req, res, next) => {
+exports.getProducts = async (req, res) => {
   const user_id = req.user_id;
   try {
     const products = await Product.findAll({

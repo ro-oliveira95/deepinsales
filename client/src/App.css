@@ -5,8 +5,8 @@
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
-  --hintbox-bg-color: rgb(65, 63, 63);
-  --hintbox-border: 1px solid rgb(122, 94, 52);
+  --hintbox-bg-color: rgb(39, 38, 38);
+  --hintbox-border: 2px solid rgb(80, 122, 52);
 }
 
 * {
@@ -220,12 +220,8 @@ button {
   outline: 3px solid transparent;
 }
 
-.btn-add-product {
-  color: var(--success-color);
-}
-
 /* Datepicker window - ProductsList */
-.datepicker-btn {
+.pop-window-btn {
   position: relative;
 }
 
@@ -255,6 +251,35 @@ button {
   width: 100%;
 }
 
+.config-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  /* height: 300px; */
+  left: -10px;
+  top: 10px;
+  z-index: 3;
+  background-color: var(--hintbox-bg-color);
+  border: var(--hintbox-border);
+  border-radius: 7px;
+  color: inherit;
+  padding: 1rem;
+}
+
+.config-container p {
+  display: block;
+  font-size: 1rem;
+}
+
+.config-container input {
+  margin: 0.5rem 0;
+  color: #ccc;
+}
+
+.config-container input[type="submit"] {
+  width: 100%;
+}
 /* Info-hint window - Product */
 .hint-hover {
   position: relative;
@@ -342,7 +367,7 @@ button {
   z-index: 2;
   background-color: var(--hintbox-bg-color);
   border: var(--hintbox-border);
-  border-radius: 7px;
+  border-radius: 3px;
   color: inherit;
   padding: 1rem;
 }
@@ -352,8 +377,9 @@ button {
   color: #fff;
 }
 
-.addProduct-btn {
-  position: relative;
+.add-product-btn {
+  /* position: relative; */
+  color: var(--success-color);
 }
 
 /* Utilities */
@@ -440,6 +466,7 @@ button {
   display: flex;
   width: 98%;
   /* background-color: rgb(75, 100, 100); */
+  overflow-y: visible;
   margin: 0 0 0.5rem 0;
   padding: 0.5rem;
   border-radius: 7px;
@@ -459,6 +486,7 @@ button {
   justify-content: space-between;
   width: 100%;
   overflow-x: hidden;
+  overflow-y: visible !important;
 }
 
 .item-header {
@@ -466,8 +494,14 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(84, 84, 90);
-  padding: 0 0.5rem;
+  background-color: rgb(66, 66, 70);
+  padding: 0.1rem 0.5rem;
+}
+
+.icons-header-container {
+  display: flex;
+  justify-content: space-between;
+  width: 35px;
 }
 
 .item-title {
@@ -484,23 +518,12 @@ button {
 
 .item-inner {
   width: 100%;
+  /* height: 100px; */
   display: flex;
   flex-direction: row;
-  /* grid-template-columns: 3fr 1fr; */
-  /* justify-content: space-between; */
   justify-content: space-between;
-  padding: 0.1rem 0.5rem;
-}
-
-.infobox {
-  width: 220px;
-  display: flex;
-  flex: 1;
-  justify-content: space-evenly;
   align-items: center;
-  padding: 0.4rem 0;
-  margin: 0.4rem 0.8rem 0 0;
-  border-right: 1px solid #fff;
+  padding: 0.1rem 0.5rem;
 }
 
 .infobox div {
@@ -537,6 +560,10 @@ button {
   transition: opacity 0.2s ease-in;
 }
 
+.icon-header-product {
+  font-size: 1rem;
+}
+
 .icon-btn:hover {
   opacity: 0.8;
 }
@@ -551,6 +578,18 @@ button {
 
 .icon-light {
   color: #aaa;
+}
+
+.btn-icon-glow {
+  color: rgb(0, 195, 255);
+}
+
+.btn-icon-glow-green {
+  color: rgb(92, 194, 71);
+}
+
+.border-glow {
+  border-color: rgb(0, 195, 255);
 }
 
 /* Alerts */

@@ -5,7 +5,8 @@
     "database": "deepinsale-db",
     "host": "/var/run/postgresql",
     "port": 5432,
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": false
   }
 }
 
