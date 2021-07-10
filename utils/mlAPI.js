@@ -74,7 +74,6 @@ const refreshMLToken = async () => {
   let token = process.env.ML_TOKEN;
   let refreshToken = process.env.ML_REFRESH_TOKEN;
   const url = `https://api.mercadolibre.com/oauth/token?grant_type=refresh_token&client_id=${process.env.ML_APP_ID}&client_secret=${process.env.ML_CLIENT_SECRET}&refresh_token=${process.env.ML_REFRESH_TOKEN}`;
-  console.log(token, refreshToken);
   try {
     const res = await axios.post(url);
     token = res.data.access_token;
@@ -85,11 +84,11 @@ const refreshMLToken = async () => {
     };
     await setEnv(dataToSave);
   } catch (err) {
+    console.error(err);
     console.log(
       `Erro ao atualizar token no ML. Mensagem: '${err.response.data.message}'; token não atualizado.`
     );
   }
-  return token;
 };
 
 const getProductInfoFromML = async (mlID) => {

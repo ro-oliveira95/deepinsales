@@ -37,16 +37,10 @@ app.use("/api/users", users);
 app.use("/api/products", products);
 app.use("/api/records", records);
 
-// (async () => {
-//   await refreshMLToken(); // each 5h30
-//   await updateCatalogueProducts(); // before recording products
-//   await recordAllProducts(); // each 24h
-// })();
-
 // scheduling token refreashing
 cron.schedule("0 */5 * * *", () => {
   d = new Date();
-  console.log(`[${d.toGMTString()}] refresing ML token...`);
+  console.log(`[${d.toGMTString()}] refreshing ML token...`);
   refreshMLToken();
 });
 
