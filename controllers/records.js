@@ -1,5 +1,5 @@
 const { SaleRecord, User, Product } = require("../db/models");
-const uuid = require("uuid/v4");
+const { v4: uuid } = require("uuid");
 
 exports.createRecord = async (req, res, next) => {
   try {

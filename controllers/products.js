@@ -20,6 +20,11 @@ exports.createProduct = async (req, res) => {
     await getProductInfoFromML(mlID);
   const seller = await getSellerNicknameFromML(seller_id);
 
+  // url associated with non-catalogue product page
+  if (!isBuybox) {
+    url = permalink;
+  }
+
   const productName = name || title;
 
   const sells = await readSellsOnMlPage(url);
@@ -29,7 +34,7 @@ exports.createProduct = async (req, res) => {
   try {
     const product = await Product.create({
       name: productName,
-      url: permalink,
+      url,
       user_id: userId,
       image_url: secure_thumbnail,
       status,

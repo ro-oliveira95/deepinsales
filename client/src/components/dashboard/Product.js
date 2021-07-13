@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { togglePlotItem } from "../../actions/plot";
 
@@ -6,6 +7,7 @@ import "./product.css";
 
 const Product = ({ product, togglePlotItem, plot }) => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [configParams, setConfigParams] = useState({ name: "" });
   const [isPloted, setisPloted] = useState(false);
 
@@ -19,6 +21,16 @@ const Product = ({ product, togglePlotItem, plot }) => {
 
   const toggleConfigPopup = () => {
     setIsConfigOpen(!isConfigOpen);
+    if (!isConfigOpen && isDetailsOpen) {
+      setIsDetailsOpen(false);
+    }
+  };
+
+  const toggleDetailsPopup = () => {
+    setIsDetailsOpen(!isDetailsOpen);
+    if (!isDetailsOpen && isConfigOpen) {
+      setIsConfigOpen(false);
+    }
   };
 
   const onChange = (e) => {
@@ -66,58 +78,77 @@ const Product = ({ product, togglePlotItem, plot }) => {
       key={index}
     >
       {category.name}
-      {isConfigOpen && <i className='fas fa-times-circle icon'></i>}
+      {isConfigOpen && (
+        <i
+          className='fas fa-times-circle icon-btn'
+          style={{ marginLeft: "5px" }}
+        ></i>
+      )}
     </div>
   ));
+
   const itemInfoContent = (
     <Fragment>
       <div>
-        <p>R${product.price}</p>
-        <p className='text-s dp'>{product.seller}</p>
+        <i className='fas fa-eye icon icon-light'></i>
+        <p className='info-icon-text'>{product.curr_total_visits}</p>
       </div>
       <div>
-        <i className='fas fa-eye icon icon-light'>
-          <p className='info-icon-text'>{product.curr_total_visits}</p>
-        </i>
+        <i className='fas fa-shopping-cart icon icon-light'></i>
+        <p className='info-icon-text'>{product.curr_total_sells}</p>
       </div>
       <div>
-        <i className='fas fa-shopping-cart icon icon-light'>
-          <p className='info-icon-text'>{product.curr_total_sells}</p>
-        </i>
-      </div>
-      <div>
-        <i className='fas fa-sync-alt icon icon-light'>
-          <p className='info-icon-text'>{product.conversion_rate.toFixed(2)}</p>
-        </i>
+        <i className='fas fa-sync-alt icon icon-light'></i>
+        <p className='info-icon-text'>{product.conversion_rate.toFixed(2)}</p>
       </div>
     </Fragment>
   );
-
   const itemConfigContent = (
     <Fragment>
-      <div>
-        <i className='fas fa-trash-alt icon icon-btn'></i>
+      <div className='icon-btn btn-danger'>
+        <i
+          className='fas fa-trash-alt icon-sm'
+          style={{ marginRight: "5px" }}
+        ></i>
         Deletar
       </div>
+    </Fragment>
+  );
+  const itemDetailsContent = (
+    <Fragment>
+      <p>R${product.price}</p>
+      <p className='text-s dp'>{product.seller}</p>
     </Fragment>
   );
 
   const listView = (
     <div className={`item-container ${isPloted ? "border-glow" : ""}`}>
-      <img src={product.image_url} alt='produto' />
+      <a href={product.url} target='_blank'>
+        <img src={product.image_url} alt='produto' className='image-btn' />
+      </a>
       <div className='item-outer'>
         <div className='item-header'>
-          <div className='icons-header-container'>
-            <i className='fas fa-angle-double-left icon icon-btn icon-header-product'></i>
-            <i
-              className={`fas fa-cog icon icon-btn icon-header-product ${
-                isConfigOpen ? "btn-icon-glow-green" : ""
-              }`}
-              onClick={() => toggleConfigPopup(product.name)}
-            ></i>
-          </div>
+          <i
+            className={`fas fa-info icon icon-btn icon-header-product ${
+              isDetailsOpen ? "btn-icon-glow-green" : ""
+            }`}
+            style={{ marginRight: "5px" }}
+            onClick={() => toggleDetailsPopup(product.name)}
+          ></i>
+          <i
+            className={`fas fa-cog icon icon-btn icon-header-product ${
+              isConfigOpen ? "btn-icon-glow-green" : ""
+            }`}
+            onClick={() => toggleConfigPopup(product.name)}
+          ></i>
+          {/* <div className='item-header-icons-container'>
+          </div> */}
           {/* <div className='dummy'>{isConfigOpen && configPopup}</div> */}
-          <p className='item-title'>{product.name}</p>
+          <p className='item-title'>
+            {product.name.length > 30
+              ? product.name.slice(0, 31).concat("...")
+              : product.name}
+          </p>
           <i
             className={`fas fa-chart-bar icon icon-btn icon-header-product ${
               isPloted ? "btn-icon-glow" : ""
@@ -128,7 +159,11 @@ const Product = ({ product, togglePlotItem, plot }) => {
         <div className='categories-box'>{categoriesList}</div>
 
         <div className='item-inner'>
-          {isConfigOpen ? itemConfigContent : itemInfoContent}
+          {isConfigOpen
+            ? itemConfigContent
+            : isDetailsOpen
+            ? itemDetailsContent
+            : itemInfoContent}
         </div>
         {/* </div> */}
       </div>

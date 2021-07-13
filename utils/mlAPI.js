@@ -31,8 +31,6 @@ const getProductIdsFromML = async (productUrl) => {
   splitedDetails = details.split("-");
   let mlID;
 
-  console.log(splitedDetails[0]);
-
   // Primeiro caso: id do produto explícito -> produto comum
   if (splitedDetails[0] === "MLB") {
     mlID = splitedDetails[0] + splitedDetails[1];
@@ -42,9 +40,7 @@ const getProductIdsFromML = async (productUrl) => {
     // Segundo caso: id implícito -> produto catalogado ('buybox')
     index = details.indexOf("/p/");
     catalogueID = details.substring(index + 3);
-    console.log("catalogueId", catalogueID);
     mlID = await getMLIdFromCatalogue(catalogueID);
-    console.log("mlId: ", mlID);
     isBuybox = true;
   }
 

@@ -55,10 +55,11 @@ const updateCatalogueProducts = async () => {
       is_buy_box: true,
     },
   });
-  products.forEach((product) => {
-    const updatedInfo = checkForUpdatesOnCatalogueProduct(product);
+
+  const promises = products.map(async (product) => {
+    const updatedInfo = await checkForUpdatesOnCatalogueProduct(product);
     updatedInfo.isUpdated &&
-      Product.update(
+      (await Product.update(
         {
           ml_id: updatedInfo.ml_id,
           seller: updatedInfo.seller,
@@ -66,8 +67,11 @@ const updateCatalogueProducts = async () => {
           status: updatedInfo.status,
         },
         { where: { id: product.id } }
-      );
+      ));
+    return;
   });
+
+  await Promise.all(promises);
 };
 
 module.exports = {
