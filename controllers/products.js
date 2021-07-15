@@ -94,3 +94,19 @@ exports.queryProducts = async (req, res) => {
     res.status(500).send("Server Error");
   }
 };
+
+exports.deleteProduct = async (req, res) => {
+  const { productId } = req.body;
+  try {
+    const product = await Product.findOne({ where: { id: productId } });
+    await product.destroy();
+    res.status(200).json({ sucess: true });
+  } catch (err) {
+    res
+      .status(500)
+      .json({
+        errors: [{ message: "Erro ao excluir produto, tente mais tarde" }],
+      });
+  }
+  return;
+};

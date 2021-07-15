@@ -40,6 +40,8 @@ app.use("/api/records", records);
 // refreashs token when server is up
 refreshMLToken();
 
+recordAllProducts();
+
 // scheduling token refreashing
 cron.schedule("0 */5 * * *", () => {
   d = new Date();
@@ -48,7 +50,7 @@ cron.schedule("0 */5 * * *", () => {
 });
 
 // scheduling record making
-cron.schedule("0 */1 * * *", async () => {
+cron.schedule("*/2 * * * *", async () => {
   d = new Date();
   console.log(`[${d.toGMTString()}] recording all products...`);
   await updateCatalogueProducts(); // before recording products

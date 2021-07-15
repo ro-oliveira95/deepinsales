@@ -51,16 +51,16 @@ function ProductList({ queryProducts, products, productsInView, loading }) {
 
   const productList = productsInView
     // sorting in order of insertion (most recent first)
-    .sort(function (a, b) {
-      let dateA = a.createdAt;
-      let dateB = b.createdAt;
-      if (dateA > dateB) {
-        return -1;
-      } else if (dateA < dateB) {
-        return 1;
-      }
-      return 0;
-    })
+    // .sort(function (a, b) {
+    //   let dateA = a.createdAt;
+    //   let dateB = b.createdAt;
+    //   if (dateA > dateB) {
+    //     return -1;
+    //   } else if (dateA < dateB) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // })
     // creating product cards
     .map((product) => <Product key={product.id} product={product} />);
   const datepickerWindow = (
@@ -111,7 +111,7 @@ function ProductList({ queryProducts, products, productsInView, loading }) {
             <i className='fas fa-layer-group icon icon-btn icon-15x'></i>
             <input
               type='text'
-              placeholder='Pesquise produtos...'
+              placeholder='Pesquise produtos ou categorias...'
               form='search-product'
               name='productName'
               value={productName}

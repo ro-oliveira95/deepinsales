@@ -23,7 +23,7 @@ const gatherProductSellsAndCreateRecord = async (product) => {
   }
   visits = visits[product.ml_id];
   const recordInfo = {
-    total_sells: sells,
+    total_sells: sells + 24,
     total_visits: visits,
     daily_sells: sells - product.curr_total_sells,
     daily_visits: visits - product.curr_total_visits,

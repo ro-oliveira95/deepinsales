@@ -9,6 +9,7 @@ export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const GET_PRODUCTS = "GET_PRODUCTS";
 export const QUERY_PRODUCTS = "QUERY_PRODUCTS";
+export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";
 export const ERROR_ADD_PRODUCT = "ERROR_ADD_PRODUCT";
 export const LOADING_PRODUCT = "LOADING_PRODUCT";

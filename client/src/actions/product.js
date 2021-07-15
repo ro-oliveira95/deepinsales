@@ -6,6 +6,7 @@ import {
   ADD_PRODUCT,
   ERROR_ADD_PRODUCT,
   LOADING_PRODUCT,
+  DELETE_PRODUCT,
 } from "./types";
 import { setAlert } from "./alert";
 import { loadRecords } from "./record";
@@ -58,39 +59,57 @@ export const addProduct =
     }
   };
 
-// export const queryProducts = ({ dateIni, dateEnd, productName }) => async (
-//   dispatch
-// ) => {
-//   const config = {
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   };
-
-//   const body = JSON.stringify({ dateIni, dateEnd, productName });
-
-//   try {
-//     const res = await axios.post("/api/products/query", body, config);
-//     console.log(res.data);
-//     dispatch({
-//       type: GET_PRODUCTS,
-//       payload: res.data,
-//     });
-//   } catch (err) {
-//     dispatch({
-//       type: PRODUCTS_ERROR,
-//       // payload: { msg: err.response.statusText, status: err.response.status },
-//       payload: { msg: "error" },
-//     });
-//   }
-// };
-
 export const queryProducts = (products, productName) => async (dispatch) => {
-  const query = products.filter((product) =>
-    product.name.toUpperCase().includes(productName.toUpperCase())
+  // const categories = products
+  //     .map((product) => {
+  //       return product.category;
+  //     })
+  //     .filter((category) => category.length != 0);
+  //   let categoriesNames = [];
+  //   categories.forEach((categoryList) =>
+  //     categoryList.forEach((category) => categoriesNames.push(category.name))
+  //   );
+  //   console.log(categoriesNames);
+  const query = products.filter(
+    (product) =>
+      // console.log(product.category.map((cat) => cat.name));
+
+      product.name.toUpperCase().includes(productName.toUpperCase()) ||
+      product.category
+        .map((cat) => cat.name)
+        .reduce((acc, curr) => acc.concat(curr), "")
+        .toUpperCase()
+        .includes(productName.toUpperCase())
   );
   dispatch({
     type: QUERY_PRODUCTS,
     payload: query,
   });
+};
+
+export const deleteProduct = (productId) => async (dispatch) => {
+  dispatch({
+    type: LOADING_PRODUCT,
+  });
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const body = JSON.stringify({ productId });
+  try {
+    const res = await axios.post("/api/products/delete", body, config);
+
+    dispatch({
+      type: DELETE_PRODUCT,
+    });
+    dispatch(loadProducts());
+    dispatch(loadRecords());
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
+    }
+  }
 };
