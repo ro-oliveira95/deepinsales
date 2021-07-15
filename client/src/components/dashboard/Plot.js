@@ -36,16 +36,14 @@ function Plot({ records, plot }) {
   //   console.log(dataset);
   // };
   const data = {
-    datasets: records.records
+    datasets: records
       .filter((saleRecord) => {
-        return (
-          plot.plotItems.includes(saleRecord.productId) &&
-          saleRecord.record.length > 0
-        );
+        return plot.plotItems.includes(saleRecord.productId);
+        // saleRecord.record.length > 0
       })
-      // .filter((saleRecord) => {
-      //   return saleRecord.record.length > 0;
-      // })
+      .filter((saleRecord) => {
+        return saleRecord.record.length > 0;
+      })
 
       .map((saleRecord) => {
         return {
@@ -86,12 +84,12 @@ function Plot({ records, plot }) {
               },
               x: {
                 type: "time",
-                time: {
-                  unit: "second",
-                  // displayFormats: {
-                  //   day: "DD",
-                  // },
-                },
+                // time: {
+                //   unit: "second",
+                //   // displayFormats: {
+                //   //   day: "DD",
+                //   // },
+                // },
               },
             },
           }}
@@ -103,7 +101,7 @@ function Plot({ records, plot }) {
 
 const mapStateToProps = (state) => ({
   plot: state.plot,
-  records: state.records,
+  // records: state.records,
 });
 
 export default connect(mapStateToProps)(Plot);
