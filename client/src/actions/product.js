@@ -7,6 +7,7 @@ import {
   ERROR_ADD_PRODUCT,
   LOADING_PRODUCT,
   DELETE_PRODUCT,
+  DELETE_CATEGORY_FROM_PRODUCT,
 } from "./types";
 import { setAlert } from "./alert";
 import { loadRecords } from "./record";
@@ -25,6 +26,33 @@ export const loadProducts = () => async (dispatch) => {
     });
   }
 };
+
+export const deleteCategoryFromProduct =
+  (productId, categoryName) => async (dispatch) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const body = JSON.stringify({ productId, categoryName });
+    try {
+      const res = await axios.post(
+        "/api/products/category/delete",
+        body,
+        config
+      );
+      dispatch({
+        type: DELETE_CATEGORY_FROM_PRODUCT,
+      });
+      dispatch(loadProducts());
+    } catch (err) {
+      const errors = err.response.data.errors;
+      if (errors) {
+        errors.forEach((error) => dispatch(setAlert(error.message, "danger")));
+      }
+    }
+  };
 
 export const addProduct =
   ({ name, url, categories }) =>
@@ -60,20 +88,8 @@ export const addProduct =
   };
 
 export const queryProducts = (products, productName) => async (dispatch) => {
-  // const categories = products
-  //     .map((product) => {
-  //       return product.category;
-  //     })
-  //     .filter((category) => category.length != 0);
-  //   let categoriesNames = [];
-  //   categories.forEach((categoryList) =>
-  //     categoryList.forEach((category) => categoriesNames.push(category.name))
-  //   );
-  //   console.log(categoriesNames);
   const query = products.filter(
     (product) =>
-      // console.log(product.category.map((cat) => cat.name));
-
       product.name.toUpperCase().includes(productName.toUpperCase()) ||
       product.category
         .map((cat) => cat.name)

@@ -44,7 +44,9 @@ exports.getAllRecordsFromUser = async (req, res, next) => {
     });
     const records = [];
     for (let product of products) {
-      const record = await product.getRecords();
+      const record = await product.getRecords({
+        order: [["timestamp", "ASC"]],
+      });
       const productId = product.id;
       records.push({
         productName: product.name,

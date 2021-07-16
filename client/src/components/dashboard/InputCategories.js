@@ -12,11 +12,17 @@ const InputCategories = ({ tags, setTags }) => {
 
     if (e.key === "Tab" && name) {
       // Check if tag already exists
-      if (tags.find((tag) => tag.name.toLowerCase() === name.toLowerCase())) {
+      // if (tags.find((tag) => tag.name.toLowerCase() === name.toLowerCase())) {
+      //   return;
+      // }
+      console.log(tags, name);
+      if (tags.includes(name)) {
+        console.log("saiu");
         return;
       }
 
-      setTags([...tags, { name, borderColor, bgColor }]);
+      // setTags([...tags, { name, borderColor, bgColor }]);
+      setTags([...tags, name]);
       tagInput.current.value = "";
     }
   };
@@ -43,8 +49,8 @@ const InputCategories = ({ tags, setTags }) => {
       />
       <ul className='tag-container'>
         {tags.map((tag, i) => (
-          <li key={tag.name} className='tag'>
-            {tag.name}
+          <li key={tag} className='tag'>
+            {tag}
             <FaTimes onClick={() => deleteTag(i)} className='tag-delete' />
           </li>
         ))}

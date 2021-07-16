@@ -2,11 +2,20 @@ import { Fragment, useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { togglePlotItem } from "../../actions/plot";
-import { deleteProduct } from "../../actions/product";
+import {
+  deleteProduct,
+  deleteCategoryFromProduct,
+} from "../../actions/product";
 
 import "./product.css";
 
-const Product = ({ product, togglePlotItem, deleteProduct, plot }) => {
+const Product = ({
+  product,
+  togglePlotItem,
+  deleteProduct,
+  deleteCategoryFromProduct,
+  plot,
+}) => {
   const [isConfigOpen, setIsConfigOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [configParams, setConfigParams] = useState({ name: "" });
@@ -83,6 +92,9 @@ const Product = ({ product, togglePlotItem, deleteProduct, plot }) => {
         <i
           className='fas fa-times-circle icon-btn'
           style={{ marginLeft: "5px" }}
+          onClick={() => {
+            deleteCategoryFromProduct(product.id, category.name);
+          }}
         ></i>
       )}
     </div>
@@ -180,6 +192,8 @@ const mapStateToProps = (state) => ({
   plot: state.plot,
 });
 
-export default connect(mapStateToProps, { togglePlotItem, deleteProduct })(
-  Product
-);
+export default connect(mapStateToProps, {
+  togglePlotItem,
+  deleteProduct,
+  deleteCategoryFromProduct,
+})(Product);

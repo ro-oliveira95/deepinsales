@@ -49,7 +49,13 @@ function Plot({ records, plot }) {
         return {
           label: saleRecord.productName,
           data: saleRecord.record.map((value) => {
-            return { x: value.timestamp, y: value.total_sells };
+            return {
+              x: value.timestamp,
+              y:
+                plot.visualization == "daily"
+                  ? value.daily_sells
+                  : value.total_sells,
+            };
           }),
           fill: false,
           backgroundColor: `rgb(${saleRecord.color[0]}, ${saleRecord.color[1]}, ${saleRecord.color[2]})`,
@@ -57,9 +63,6 @@ function Plot({ records, plot }) {
           tension: 0.2,
         };
       }),
-    // .sort((a, b) =>
-    //   a.last_nom > b.last_nom ? 1 : b.last_nom > a.last_nom ? -1 : 0
-    // ),
   };
 
   return (
@@ -76,7 +79,10 @@ function Plot({ records, plot }) {
                 position: "left",
                 title: {
                   display: true,
-                  text: "Vendas acumuladas",
+                  text:
+                    plot.visualization == "daily"
+                      ? "Vendas diárias"
+                      : "Vendas acumuladas",
                   font: {
                     size: 16,
                   },

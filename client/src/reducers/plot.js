@@ -1,7 +1,8 @@
-import { TOGGLE_PLOT_ITEM } from "../actions/types";
+import { TOGGLE_PLOT_ITEM, TOGGLE_PLOT_VISUALIZATION } from "../actions/types";
 
 const initialState = {
   plotItems: [],
+  visualization: "acumulated",
 };
 
 function plotReducer(state = initialState, action) {
@@ -12,6 +13,11 @@ function plotReducer(state = initialState, action) {
       return {
         ...state,
         plotItems: payload,
+      };
+    case TOGGLE_PLOT_VISUALIZATION:
+      return {
+        ...state,
+        visualization: payload,
       };
     default:
       return state;

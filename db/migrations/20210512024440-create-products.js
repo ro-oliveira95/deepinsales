@@ -40,11 +40,19 @@ module.exports = {
         allowNull: false,
       },
       curr_total_sells: {
-        type: Sequelize.DataTypes.REAL,
+        type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },
       curr_total_visits: {
-        type: Sequelize.DataTypes.REAL,
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+      },
+      base_sells: {
+        type: Sequelize.DataTypes.INTEGER,
+        allowNull: false,
+      },
+      base_visits: {
+        type: Sequelize.DataTypes.INTEGER,
         allowNull: false,
       },
       conversion_rate: {

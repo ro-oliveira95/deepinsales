@@ -1,4 +1,5 @@
-import { TOGGLE_PLOT_ITEM } from "./types";
+import { loadRecords } from "./record";
+import { TOGGLE_PLOT_ITEM, TOGGLE_PLOT_VISUALIZATION } from "./types";
 
 export const togglePlotItem =
   (plotItems, item, isPloted) => async (dispatch) => {
@@ -10,3 +11,16 @@ export const togglePlotItem =
       payload: newPlotItems,
     });
   };
+
+export const togglePlotVisualization = (isDaily) => async (dispatch) => {
+  let payload;
+  if (isDaily) {
+    payload = "daily";
+  } else {
+    payload = "acumulated";
+  }
+  dispatch({
+    type: TOGGLE_PLOT_VISUALIZATION,
+    payload,
+  });
+};

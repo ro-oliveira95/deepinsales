@@ -225,8 +225,13 @@ button {
   position: relative;
 }
 
-.datepicker-container {
+.plotConfig-container {
   position: absolute;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
+  align-items: center;
+  width: 240px;
   left: -10px;
   top: 10px;
   z-index: 2;
@@ -237,18 +242,23 @@ button {
   padding: 1rem;
 }
 
-.datepicker-container p {
+.plotConfig-container h2 {
+  text-align: center;
+  color: #ddd;
+  margin-bottom: 20px;
+}
+
+.plotConfig-container p {
   display: block;
-  font-size: 1rem;
+  text-align: start;
 }
-
-.datepicker-container input {
-  margin: 0.5rem 0;
-  color: #ccc;
-}
-
-.datepicker-container input[type="submit"] {
+.plotConfig-bx {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 7px;
+  color: rgb(202, 202, 202);
 }
 
 .config-container {

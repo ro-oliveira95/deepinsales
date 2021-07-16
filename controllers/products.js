@@ -1,4 +1,4 @@
-const { Product } = require("../db/models");
+const { Product, Category } = require("../db/models");
 const { getImageURL, readSellsOnMlPage } = require("../utils/scrapers");
 const { gatherProductSellsAndCreateRecord } = require("../utils/dailyRoutines");
 const {
@@ -31,6 +31,39 @@ exports.createProduct = async (req, res) => {
   let visits = await getVisits(mlID);
   visits = visits[mlID];
 
+  // checking if user already has the category; if not, create it
+  const dbCategories = await Category.findAll({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  let categoriesFinal = [];
+  let r, g, b, borderColor, bgColor;
+  const dbCategoriesNames = dbCategories.map((category) => category.name);
+  categories.forEach((category) => {
+    if (!dbCategoriesNames.includes(category)) {
+      [r, g, b] = [
+        Math.floor(Math.random() * 250),
+        Math.floor(Math.random() * 250),
+        Math.floor(Math.random() * 250),
+      ];
+      borderColor = `rgb(${r}, ${g}, ${b})`;
+      bgColor = `rgba(${r}, ${g}, ${b}, 0.1)`;
+      // inserting into db
+      Category.create({
+        name: category,
+        rgb: [r, g, b],
+        user_id: userId,
+      });
+    } else {
+      const cat = dbCategories.find((cat) => cat.name == category);
+      borderColor = `rgb(${cat.rgb[0]}, ${cat.rgb[1]}, ${cat.rgb[2]})`;
+      bgColor = `rgba(${cat.rgb[0]}, ${cat.rgb[1]}, ${cat.rgb[2]}, 0.1)`;
+    }
+    categoriesFinal.push({ name: category, borderColor, bgColor });
+  });
+
   try {
     const product = await Product.create({
       name: productName,
@@ -43,13 +76,15 @@ exports.createProduct = async (req, res) => {
         Math.floor(Math.random() * 255),
         Math.floor(Math.random() * 255),
       ],
-      category: categories,
+      category: categoriesFinal,
       seller,
       price,
       catalogue_id: catalogueID,
       ml_id: mlID,
-      curr_total_sells: sells,
-      curr_total_visits: visits,
+      curr_total_sells: 0,
+      curr_total_visits: 0,
+      base_sells: sells,
+      base_visits: visits,
       conversion_rate: sells / visits,
       is_buy_box: isBuybox,
       user_id: userId,
@@ -102,11 +137,28 @@ exports.deleteProduct = async (req, res) => {
     await product.destroy();
     res.status(200).json({ sucess: true });
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        errors: [{ message: "Erro ao excluir produto, tente mais tarde" }],
-      });
+    res.status(500).json({
+      errors: [{ message: "Erro ao excluir produto, tente mais tarde" }],
+    });
+  }
+  return;
+};
+
+exports.deleteCategoryFromProduct = async (req, res) => {
+  const { productId, categoryName } = req.body;
+  try {
+    const product = await Product.findOne({ where: { id: productId } });
+    const category = product.category.filter(
+      (cat) => cat.name !== categoryName
+    );
+    await product.update({
+      category,
+    });
+    res.status(200).json({ sucess: true });
+  } catch (err) {
+    res.status(500).json({
+      errors: [{ message: "Erro ao excluir categoria, tente mais tarde" }],
+    });
   }
   return;
 };

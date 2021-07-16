@@ -18,22 +18,24 @@ const gatherProductSellsAndCreateRecord = async (product) => {
   let visits = await getVisits(product.ml_id);
   // case in which MercadoLivre doesn't respond as expected
   if (!visits) {
-    console.log(`Not updated sells nor visits from product ${product.name}`);
+    console.log(`Create reacord from ${product.name} failed`);
     return;
   }
   visits = visits[product.ml_id];
+  const totalSells = sells - product.base_sells;
+  const totalVisits = visits - product.base_visits;
   const recordInfo = {
-    total_sells: sells + 24,
-    total_visits: visits,
-    daily_sells: sells - product.curr_total_sells,
-    daily_visits: visits - product.curr_total_visits,
+    total_sells: totalSells,
+    total_visits: totalVisits,
+    daily_sells: totalSells - product.curr_total_sells,
+    daily_visits: totalVisits - product.curr_total_visits,
     product_id: product.id,
   };
   await createRecord(recordInfo);
   await Product.update(
     {
-      curr_total_sells: sells,
-      curr_total_visits: visits,
+      curr_total_sells: totalSells,
+      curr_total_visits: totalVisits,
     },
     { where: { id: product.id } }
   );

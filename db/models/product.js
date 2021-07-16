@@ -41,11 +41,19 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       curr_total_sells: {
-        type: DataTypes.REAL,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       curr_total_visits: {
-        type: DataTypes.REAL,
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      base_sells: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      base_visits: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       conversion_rate: {

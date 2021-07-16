@@ -38,20 +38,20 @@ app.use("/api/products", products);
 app.use("/api/records", records);
 
 // refreashs token when server is up
-refreshMLToken();
-
-recordAllProducts();
+(async () => await refreshMLToken())();
 
 // scheduling token refreashing
 cron.schedule("0 */5 * * *", () => {
-  d = new Date();
+  let d = new Date();
+  d = new Date(d.valueOf() - d.getTimezoneOffset() * 60000);
   console.log(`[${d.toGMTString()}] refreshing ML token...`);
   refreshMLToken();
 });
 
 // scheduling record making
 cron.schedule("*/2 * * * *", async () => {
-  d = new Date();
+  let d = new Date();
+  d = new Date(d.valueOf() - d.getTimezoneOffset() * 60000);
   console.log(`[${d.toGMTString()}] recording all products...`);
   await updateCatalogueProducts(); // before recording products
   await recordAllProducts(); // each 24h
