@@ -227,13 +227,14 @@ button {
 
 .plotConfig-container {
   position: absolute;
-  /* display: flex;
+  display: flex;
   flex-direction: column;
-  justify-content: center; */
-  align-items: center;
-  width: 240px;
-  left: -10px;
-  top: 10px;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 250px;
+  height: 140px;
+  left: -100px;
+  top: 15px;
   z-index: 2;
   background-color: var(--hintbox-bg-color);
   border: var(--hintbox-border);
@@ -243,6 +244,7 @@ button {
 }
 
 .plotConfig-container h2 {
+  width: 100%;
   text-align: center;
   color: #ddd;
   margin-bottom: 20px;
@@ -310,11 +312,36 @@ button {
   display: flex;
   justify-content: left;
   border-bottom: 1px solid rgb(84, 84, 90);
-  overflow: hidden;
+  overflow-x: auto;
+}
+
+/* scrollbar config */
+.categories-box::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+
+.categories-box::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+  height: 2px;
+}
+
+.categories-box::-webkit-scrollbar-thumb {
+  background: rgb(209, 92, 209);
+  border-radius: 5px;
+}
+
+.categories-box::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 195, 255, 0.7);
 }
 
 /* Categories - Product */
 .categories-tag {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
   position: relative;
   font-size: 0.6rem;
   color: #fff;
@@ -390,9 +417,25 @@ button {
 .add-product-btn {
   /* position: relative; */
   color: var(--success-color);
+  margin-right: 0 !important;
 }
 
 /* Utilities */
+
+.expand-width {
+  width: 100%;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
 .dummy {
   position: relative;
 }
@@ -481,6 +524,11 @@ button {
   padding: 0.5rem;
   border-radius: 7px;
   border: solid 1px rgb(105, 104, 104);
+  /* background-color: rgba(230, 22, 22, 0.322); */
+}
+
+.item-paused {
+  border: solid 1.5px rgb(230, 22, 22);
 }
 
 .item-container img {
@@ -584,6 +632,11 @@ button {
 
 .icon-btn:hover {
   opacity: 0.8;
+}
+
+.icon-paused {
+  color: rgb(196, 14, 14);
+  margin-right: 4px;
 }
 
 .icon-2x {
@@ -698,4 +751,67 @@ button {
 
 .text-primary {
   color: var(--primary-color);
+}
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: rgb(32, 35, 36);
+  color: rgb(230, 222, 222);
+  padding: 3px;
+  font-size: 16px;
+  border: none;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  width: 45px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  border: 1px solid rgb(160, 159, 157);
+  border-radius: 2px;
+  margin-right: 1rem;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #363535;
+  width: 46px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Links inside the dropdown */
+.icon-dropdown {
+  /* width: 100%;
+  height: 40px; */
+  color: #ddd;
+  padding: 14px 4px;
+  text-decoration: none;
+  display: block;
+  align-self: center;
+  margin-left: 10px;
+}
+
+.icon-dropdown:hover {
+  color: #3e8e41;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+  /* display: flex;
+  flex-direction: column;
+  align-items: center; */
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {
+  color: #3e8e41;
 }

@@ -49,7 +49,7 @@ cron.schedule("0 */5 * * *", () => {
 });
 
 // scheduling record making
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("0 */1 * * *", async () => {
   let d = new Date();
   d = new Date(d.valueOf() - d.getTimezoneOffset() * 60000);
   console.log(`[${d.toGMTString()}] recording all products...`);

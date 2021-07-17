@@ -87,15 +87,24 @@ function Plot({ records, plot }) {
                     size: 16,
                   },
                 },
+                grid: {
+                  display: true,
+                  drawBorder: true,
+                  drawOnChartArea: true,
+                  drawTicks: true,
+                  color: "rgba(120,120,120, 0.5)",
+                },
               },
+
               x: {
                 type: "time",
-                // time: {
-                //   unit: "second",
-                //   // displayFormats: {
-                //   //   day: "DD",
-                //   // },
-                // },
+                distribution: "linear",
+                time: {
+                  // unit: "day",
+                  displayFormats: {
+                    day: "DD",
+                  },
+                },
               },
             },
           }}

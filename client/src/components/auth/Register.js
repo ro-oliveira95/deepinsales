@@ -44,7 +44,7 @@ function Register({ setAlert, register, isAuthenticated }) {
           <div className='form-group'>
             <input
               type='text'
-              placeholder='Name'
+              placeholder='Nome'
               name='name'
               value={name}
               onChange={(e) => onChange(e)}
@@ -54,7 +54,7 @@ function Register({ setAlert, register, isAuthenticated }) {
           <div className='form-group'>
             <input
               type='email'
-              placeholder='Email Address'
+              placeholder='Endereço de email'
               name='email'
               value={email}
               onChange={(e) => onChange(e)}
@@ -64,7 +64,7 @@ function Register({ setAlert, register, isAuthenticated }) {
           <div className='form-group'>
             <input
               type='password'
-              placeholder='Password'
+              placeholder='Senha'
               name='password'
               minLength='6'
               value={password}
@@ -75,7 +75,7 @@ function Register({ setAlert, register, isAuthenticated }) {
           <div className='form-group'>
             <input
               type='password'
-              placeholder='Confirm Password'
+              placeholder='Repetir senha'
               name='password2'
               minLength='6'
               value={password2}
@@ -88,6 +88,9 @@ function Register({ setAlert, register, isAuthenticated }) {
             className='btn btn-primary'
             value='Registar-se'
           />
+          <p className='my-1'>
+            Já possui uma conta? <a href='/login'>Entrar</a>
+          </p>
         </form>
       </section>
     </Fragment>

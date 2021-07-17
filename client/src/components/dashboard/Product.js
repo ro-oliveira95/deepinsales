@@ -6,6 +6,8 @@ import {
   deleteProduct,
   deleteCategoryFromProduct,
 } from "../../actions/product";
+import { FaTimes } from "react-icons/fa";
+import { BsFillExclamationCircleFill } from "react-icons/bs";
 
 import "./product.css";
 
@@ -87,16 +89,36 @@ const Product = ({
       }}
       key={index}
     >
-      {category.name}
-      {isConfigOpen && (
-        <i
-          className='fas fa-times-circle icon-btn'
-          style={{ marginLeft: "5px" }}
-          onClick={() => {
-            deleteCategoryFromProduct(product.id, category.name);
-          }}
-        ></i>
-      )}
+      {/* <div className='tag'> */}
+      <p>{category.name}</p>
+      <FaTimes
+        style={{
+          marginLeft: "5px",
+          display: `${isConfigOpen ? "block" : "none"}`,
+        }}
+        onClick={() => deleteCategoryFromProduct(product.id, category.name)}
+        className='tag-delete'
+      />
+      {/* <i
+        className='fas fa-times-circle icon-btn'
+        style={{
+          marginLeft: "5px",
+          display: `${isConfigOpen ? "block" : "none"}`,
+        }}
+        onClick={() => {
+          deleteCategoryFromProduct(product.id, category.name);
+        }}
+      ></i> */}
+      {/* {isConfigOpen && (
+          <i
+            className='fas fa-times-circle icon-btn'
+            style={{ marginLeft: "5px" }}
+            onClick={() => {
+              deleteCategoryFromProduct(product.id, category.name);
+            }}
+          ></i>
+        )} */}
+      {/* </div> */}
     </div>
   ));
 
@@ -138,7 +160,11 @@ const Product = ({
   );
 
   const listView = (
-    <div className={`item-container ${isPloted ? "border-glow" : ""}`}>
+    <div
+      className={`item-container noselect ${isPloted ? "border-glow" : ""} ${
+        product.status != "active" ? "item-paused" : ""
+      }`}
+    >
       <a href={product.url} target='_blank'>
         <img src={product.image_url} alt='produto' className='image-btn' />
       </a>
@@ -165,6 +191,9 @@ const Product = ({
               ? product.name.slice(0, 31).concat("...")
               : product.name}
           </p>
+          {product.status != "active" && (
+            <BsFillExclamationCircleFill className='icon-paused' />
+          )}
           <i
             className={`fas fa-chart-bar icon icon-btn icon-header-product ${
               isPloted ? "btn-icon-glow" : ""

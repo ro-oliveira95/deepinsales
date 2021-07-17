@@ -9,6 +9,8 @@ import Alert from "../layout/Alert";
 
 import { CommonLoading } from "react-loadingg";
 import Switch from "react-switch";
+import { BiTime } from "react-icons/bi";
+import { BsArrowUpShort } from "react-icons/bs";
 
 function ProductList({
   queryProducts,
@@ -26,6 +28,7 @@ function ProductList({
       productName: "",
     },
   ]);
+  const [listOrder, setListOrder] = useState("sells");
   const [isDailyPlotChecked, setIsDailyPlotChecked] = useState(false);
 
   const { dateIni, dateEnd, productName } = queryParams;
@@ -66,8 +69,29 @@ function ProductList({
   const productList = productsInView
     // sorting in order of insertion (most recent first)
     .sort(function (a, b) {
-      let dateA = a.createdAt;
-      let dateB = b.createdAt;
+      let dateA;
+      let dateB;
+      switch (listOrder) {
+        case "createdAt":
+          dateA = a.createdAt;
+          dateB = b.createdAt;
+          break;
+        case "visits":
+          dateA = a.curr_total_visits;
+          dateB = b.curr_total_visits;
+          break;
+        case "sells":
+          dateA = a.curr_total_sells;
+          dateB = b.curr_total_sells;
+          break;
+        case "conversionRate":
+          dateA = a.conversion_rate;
+          dateB = b.conversion_rate;
+          break;
+      }
+
+      console.log(dateA);
+
       if (dateA > dateB) {
         return -1;
       } else if (dateA < dateB) {
@@ -80,30 +104,32 @@ function ProductList({
 
   const plotConfigWindow = (
     <Fragment>
-      <div className='plotConfig-container'>
+      <div className='plotConfig-container noselect'>
         <h2>Ajustes do gráfico</h2>
-        <p>Modo de visualização</p>
-        <div className='plotConfig-bx'>
-          <span>Acumulado</span>
-          <Switch
-            onChange={toggleVisualizationInPlot}
-            checked={isDailyPlotChecked}
-            onColor='#ddd'
-            offColor='#ddd'
-            onHandleColor='#2693e6'
-            offHandleColor='#2693e6'
-            handleDiameter={30}
-            uncheckedIcon={false}
-            checkedIcon={false}
-            boxShadow='0px 1px 5px rgba(0, 0, 0, 0.6)'
-            activeBoxShadow='0px 0px 1px 10px rgba(0, 0, 0, 0.2)'
-            height={15}
-            handleDiameter={22}
-            width={48}
-            className='react-switch'
-            id='material-switch'
-          />
-          <span>Diário</span>
+        <div className='expand-width'>
+          <p>Modo de visualização</p>
+          <div className='plotConfig-bx'>
+            <span>Acumulado</span>
+            <Switch
+              onChange={toggleVisualizationInPlot}
+              checked={isDailyPlotChecked}
+              onColor='#ddd'
+              offColor='#ddd'
+              onHandleColor='#2693e6'
+              offHandleColor='#2693e6'
+              handleDiameter={30}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              boxShadow='0px 1px 5px rgba(0, 0, 0, 0.6)'
+              activeBoxShadow='0px 0px 1px 10px rgba(0, 0, 0, 0.2)'
+              height={15}
+              handleDiameter={22}
+              width={48}
+              className='react-switch'
+              id='material-switch'
+            />
+            <span>Diário</span>
+          </div>
         </div>
       </div>
     </Fragment>
@@ -116,10 +142,49 @@ function ProductList({
           <form id='search-product' onSubmit={(e) => searchProduct(e)}></form>
           <div className='form-products'>
             {/* <i className='fas fa-filter icon icon-btn icon-15x'></i> */}
+
             <i
               className='fas fa-chart-pie icon icon-btn icon-15x pop-window-btn'
               onClick={() => togglePlotConfig()}
             ></i>
+            <div class='dropdown'>
+              <button class='dropbtn'>
+                <BsArrowUpShort />
+                {/* <BiTime className='icon-15x' /> */}
+                {/* <i className='fas fa-clock'></i> */}
+                {/* <BiTime className='icon-15x' /> */}
+                {/* <i className='fas fa-shopping-cart'></i> */}
+                {/* <i className='fas fa-eye'></i> */}
+                {/* <i className='fas fa-sync-alt'></i> */}
+                {listOrder == "createdAt" ? (
+                  <i className='fas fa-clock'></i>
+                ) : listOrder == "visits" ? (
+                  <i className='fas fa-eye'></i>
+                ) : listOrder == "sells" ? (
+                  <i className='fas fa-shopping-cart'></i>
+                ) : (
+                  <i className='fas fa-sync-alt'></i>
+                )}
+              </button>
+              <div class='dropdown-content'>
+                <i
+                  className='fas fa-clock icon-dropdown'
+                  onClick={() => setListOrder("createdAt")}
+                ></i>
+                <i
+                  className='fas fa-eye icon-dropdown'
+                  onClick={() => setListOrder("visits")}
+                ></i>
+                <i
+                  className='fas fa-shopping-cart icon-dropdown'
+                  onClick={() => setListOrder("sells")}
+                ></i>
+                <i
+                  className='fas fa-sync-alt icon-dropdown'
+                  onClick={() => setListOrder("conversionRate")}
+                ></i>
+              </div>
+            </div>
             <div className='dummy'>{plotConfig && plotConfigWindow}</div>
             {/* <i className='fas fa-layer-group icon icon-btn icon-15x'></i> */}
             <input
@@ -130,6 +195,7 @@ function ProductList({
               value={productName}
               onChange={(e) => onChange(e)}
             />
+
             <i
               className='fas fa-plus-square icon-btn icon-2x add-product-btn'
               onClick={() => toggleAddProductForm()}
@@ -139,6 +205,14 @@ function ProductList({
             </div>
           </div>
         </div>
+        {/* <div
+          style={{
+            width: "100%",
+            height: "20px",
+            borderBottom: "1px solid white",
+            marginBottom: "6px",
+          }}
+        ></div> */}
         <div className='products-body' style={{ overflowY: "auto" }}>
           {/* <ul>{productList}</ul> */}
           {loading && (
