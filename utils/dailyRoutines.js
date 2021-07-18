@@ -36,6 +36,7 @@ const gatherProductSellsAndCreateRecord = async (product) => {
     {
       curr_total_sells: totalSells,
       curr_total_visits: totalVisits,
+      conversion_rate: totalSells / totalVisits,
     },
     { where: { id: product.id } }
   );
