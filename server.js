@@ -39,6 +39,7 @@ app.use("/api/records", records);
 
 // refreashs token when server is up
 (async () => await refreshMLToken())();
+(async () => await recordAllProducts())();
 
 // scheduling token refreashing
 cron.schedule("0 */5 * * *", () => {
