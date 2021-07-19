@@ -231,7 +231,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  width: 250px;
+  width: 300px;
   height: 140px;
   left: -100px;
   top: 15px;
@@ -780,7 +780,7 @@ button {
   display: none;
   position: absolute;
   background-color: #363535;
-  width: 46px;
+  width: 220px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
   flex-direction: column;

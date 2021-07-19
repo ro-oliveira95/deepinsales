@@ -81,7 +81,7 @@ function Plot({ records, plot }) {
                   display: true,
                   text:
                     plot.visualization == "daily"
-                      ? "Vendas diárias"
+                      ? "Vendas de hora em hora"
                       : "Vendas acumuladas",
                   font: {
                     size: 16,

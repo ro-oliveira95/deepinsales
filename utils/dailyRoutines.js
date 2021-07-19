@@ -32,11 +32,18 @@ const gatherProductSellsAndCreateRecord = async (product) => {
     product_id: product.id,
   };
   await createRecord(recordInfo);
+  // calculating average sells/hour
+  const timeRef = Date.parse(product.createdAt);
+  const timeNow = Date.now();
+  const elapsedHours = (timeNow - timeRef) / 1000 / 3600;
+  const meanSells = totalSells / elapsedHours;
+  // updating product
   await Product.update(
     {
       curr_total_sells: totalSells,
       curr_total_visits: totalVisits,
       conversion_rate: totalSells / totalVisits,
+      mean_sells: meanSells,
     },
     { where: { id: product.id } }
   );

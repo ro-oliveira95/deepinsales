@@ -59,6 +59,9 @@ module.exports = {
         type: Sequelize.DataTypes.REAL,
         allowNull: false,
       },
+      mean_sells: {
+        type: Sequelize.DataTypes.REAL,
+      },
       is_buy_box: {
         type: Sequelize.DataTypes.BOOLEAN,
         allowNull: false,

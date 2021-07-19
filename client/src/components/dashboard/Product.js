@@ -125,12 +125,13 @@ const Product = ({
   const itemInfoContent = (
     <Fragment>
       <div>
-        <i className='fas fa-eye icon icon-light'></i>
-        <p className='info-icon-text'>{product.curr_total_visits}</p>
-      </div>
-      <div>
         <i className='fas fa-shopping-cart icon icon-light'></i>
         <p className='info-icon-text'>{product.curr_total_sells}</p>
+      </div>
+      <div>
+        <i className='fas fa-exchange-alt  icon icon-light'></i>
+        {/* <i className='fas fa-eye icon icon-light'></i> */}
+        <p className='info-icon-text'>{product.mean_sells.toFixed(2)}</p>
       </div>
       <div>
         <i className='fas fa-sync-alt icon icon-light'></i>

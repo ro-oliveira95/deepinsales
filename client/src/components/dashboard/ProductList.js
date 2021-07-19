@@ -76,9 +76,9 @@ function ProductList({
           dateA = a.createdAt;
           dateB = b.createdAt;
           break;
-        case "visits":
-          dateA = a.curr_total_visits;
-          dateB = b.curr_total_visits;
+        case "meanSells":
+          dateA = a.mean_sells;
+          dateB = b.mean_sells;
           break;
         case "sells":
           dateA = a.curr_total_sells;
@@ -89,8 +89,6 @@ function ProductList({
           dateB = b.conversion_rate;
           break;
       }
-
-      console.log(dateA);
 
       if (dateA > dateB) {
         return -1;
@@ -128,7 +126,7 @@ function ProductList({
               className='react-switch'
               id='material-switch'
             />
-            <span>Diário</span>
+            <span>Hora em hora</span>
           </div>
         </div>
       </div>
@@ -158,8 +156,8 @@ function ProductList({
                 {/* <i className='fas fa-sync-alt'></i> */}
                 {listOrder == "createdAt" ? (
                   <i className='fas fa-clock'></i>
-                ) : listOrder == "visits" ? (
-                  <i className='fas fa-eye'></i>
+                ) : listOrder == "meanSells" ? (
+                  <i className='fas fa-exchange-alt'></i>
                 ) : listOrder == "sells" ? (
                   <i className='fas fa-shopping-cart'></i>
                 ) : (
@@ -167,22 +165,34 @@ function ProductList({
                 )}
               </button>
               <div class='dropdown-content'>
-                <i
-                  className='fas fa-clock icon-dropdown'
+                <div
+                  className=' icon-dropdown icon-btn'
                   onClick={() => setListOrder("createdAt")}
-                ></i>
-                <i
-                  className='fas fa-eye icon-dropdown'
-                  onClick={() => setListOrder("visits")}
-                ></i>
-                <i
-                  className='fas fa-shopping-cart icon-dropdown'
+                >
+                  <i className='fas fa-clock'></i>
+                  <span>Data de inserção</span>
+                </div>
+                <div
+                  className='icon-dropdown icon-btn'
                   onClick={() => setListOrder("sells")}
-                ></i>
-                <i
-                  className='fas fa-sync-alt icon-dropdown'
+                >
+                  <i className='fas fa-shopping-cart'></i>
+                  <span>Vendas</span>
+                </div>
+                <div
+                  className='icon-dropdown icon-btn'
+                  onClick={() => setListOrder("meanSells")}
+                >
+                  <i className='fas fa-exchange-alt'></i>
+                  <span>Média de vendas/hora</span>
+                </div>
+                <div
+                  className='icon-dropdown icon-btn'
                   onClick={() => setListOrder("conversionRate")}
-                ></i>
+                >
+                  <i className='fas fa-sync-alt'></i>
+                  <span>Taxa de conversão</span>
+                </div>
               </div>
             </div>
             <div className='dummy'>{plotConfig && plotConfigWindow}</div>
