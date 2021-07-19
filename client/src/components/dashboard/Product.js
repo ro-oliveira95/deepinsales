@@ -131,11 +131,13 @@ const Product = ({
       <div>
         <i className='fas fa-exchange-alt  icon icon-light'></i>
         {/* <i className='fas fa-eye icon icon-light'></i> */}
-        <p className='info-icon-text'>{product.mean_sells.toFixed(2)}</p>
+        <p className='info-icon-text'>{product.mean_sells.toFixed(2) || `x`}</p>
       </div>
       <div>
         <i className='fas fa-sync-alt icon icon-light'></i>
-        <p className='info-icon-text'>{product.conversion_rate.toFixed(2)}</p>
+        <p className='info-icon-text'>
+          {product.conversion_rate.toFixed(2) || `x`}
+        </p>
       </div>
     </Fragment>
   );
