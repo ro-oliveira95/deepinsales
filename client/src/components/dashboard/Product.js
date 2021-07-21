@@ -8,6 +8,7 @@ import {
 } from "../../actions/product";
 import { FaTimes } from "react-icons/fa";
 import { BsFillExclamationCircleFill } from "react-icons/bs";
+import { DateTime } from "luxon";
 
 import "./product.css";
 
@@ -99,46 +100,32 @@ const Product = ({
         onClick={() => deleteCategoryFromProduct(product.id, category.name)}
         className='tag-delete'
       />
-      {/* <i
-        className='fas fa-times-circle icon-btn'
-        style={{
-          marginLeft: "5px",
-          display: `${isConfigOpen ? "block" : "none"}`,
-        }}
-        onClick={() => {
-          deleteCategoryFromProduct(product.id, category.name);
-        }}
-      ></i> */}
-      {/* {isConfigOpen && (
-          <i
-            className='fas fa-times-circle icon-btn'
-            style={{ marginLeft: "5px" }}
-            onClick={() => {
-              deleteCategoryFromProduct(product.id, category.name);
-            }}
-          ></i>
-        )} */}
-      {/* </div> */}
     </div>
   ));
 
   const itemInfoContent = (
     <Fragment>
       <div>
-        <i className='fas fa-shopping-cart icon icon-light'></i>
+        <i className='fas fa-shopping-cart icon icon-colorful'></i>
         <p className='info-icon-text'>{product.curr_total_sells}</p>
       </div>
       <div>
-        <i className='fas fa-exchange-alt  icon icon-light'></i>
-        {/* <i className='fas fa-eye icon icon-light'></i> */}
+        <i className='fas fa-exchange-alt  icon icon-colorful'></i>
+        {/* <i className='fas fa-eye icon icon-colorful'></i> */}
         <p className='info-icon-text'>
-          {product.mean_sells ? product.mean_sells.toFixed(2) : `x`}
+          {product.mean_sells !== null && product.mean_sells !== undefined
+            ? product.mean_sells.toFixed(2)
+            : `x`}
         </p>
       </div>
       <div>
-        <i className='fas fa-sync-alt icon icon-light'></i>
+        <i className='fas fa-sync-alt icon icon-colorful'></i>
         <p className='info-icon-text'>
-          {product.conversion_rate ? product.conversion_rate.toFixed(2) : `x`}
+          {product.conversion_rate !== null &&
+          product.conversion_rate !== undefined
+            ? (100 * product.conversion_rate).toFixed(1)
+            : `x`}
+          %
         </p>
       </div>
     </Fragment>
@@ -159,8 +146,26 @@ const Product = ({
   );
   const itemDetailsContent = (
     <Fragment>
-      <p>R${product.price}</p>
-      <p className='text-s dp'>{product.seller}</p>
+      <div className='flex-col-space-left'>
+        <div className='mg-b-2 flex-row'>
+          <i className='fas fa-store mg-r-1 icon icon-colorful'></i>
+          <p>{product.seller}</p>
+        </div>
+        <div className='mg-b-2 flex-row'>
+          <i className='far fa-clock mg-r-1 icon icon-colorful'></i>
+          <p>{`${DateTime.fromISO(product.createdAt).toFormat("ff")}`}</p>
+          {/* {console.log(product.createdAt)} */}
+        </div>
+      </div>
+      <div className='flex-col-space-left'>
+        <div className='mg-b-2 flex-row'>
+          <i className='fas fa-money-bill mg-r-1 icon icon-colorful'></i>
+          <p>R${product.price}</p>
+        </div>
+        <p style={{ color: !product.is_buy_box && "#555" }}>
+          {true && "Buybox"}
+        </p>
+      </div>
     </Fragment>
   );
 
@@ -206,9 +211,15 @@ const Product = ({
             onClick={() => toggleItemVisibility(product)}
           ></i>
         </div>
-        <div className='categories-box'>{categoriesList}</div>
+        {!isDetailsOpen && (
+          <div className='categories-box'>{categoriesList}</div>
+        )}
 
-        <div className='item-inner'>
+        <div
+          className={`item-inner ${
+            isDetailsOpen && "product-details-expand-h mg-t-1"
+          }`}
+        >
           {isConfigOpen
             ? itemConfigContent
             : isDetailsOpen

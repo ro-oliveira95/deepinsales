@@ -89,6 +89,7 @@ exports.createProduct = async (req, res) => {
       is_buy_box: isBuybox,
       user_id: userId,
     });
+    // console.log(product.conversion_rate);
     await gatherProductSellsAndCreateRecord(product);
 
     return res.status(200).json({ sucess: true, product });

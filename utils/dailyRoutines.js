@@ -42,7 +42,7 @@ const gatherProductSellsAndCreateRecord = async (product) => {
     {
       curr_total_sells: totalSells,
       curr_total_visits: totalVisits,
-      conversion_rate: totalSells / totalVisits,
+      conversion_rate: totalVisits !== 0 ? totalSells / totalVisits : 0,
       mean_sells: meanSells,
     },
     { where: { id: product.id } }
