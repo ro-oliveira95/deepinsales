@@ -21,9 +21,7 @@ const Dashboard = ({ product, records, loadProducts, loadRecords }) => {
           productsInView={product.productsInView}
           loading={product.loading}
         />
-        {/* {!records.loading && <Plot records={records.records} redraw={true} />} */}
         <Plot records={records.records} redraw={true} />
-        {/* <Plot redraw={true} /> */}
       </div>
     </Fragment>
   );

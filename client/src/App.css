@@ -869,3 +869,55 @@ button {
 .dropdown:hover .dropbtn {
   color: #3e8e41;
 }
+
+@media only screen and (max-width: 800px) {
+  .workarea {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    margin-top: 50px;
+    height: 900px;
+  }
+
+  /* .container-plot {
+    height: 50vh;
+  } */
+
+  .container-products {
+    height: 800px;
+    /* height: 50vh; */
+    padding: 0 10px;
+  }
+
+  .navbar-transposed {
+    flex-direction: row;
+    width: 100vw;
+    height: 30px;
+    border: none;
+    border-bottom: 1px solid var(--primary-color);
+  }
+
+  .logo-m {
+    width: 25px;
+    height: 25px;
+    margin: 0;
+  }
+
+  .form-products i:not(:last-child),
+  .form-products input,
+  .dropdown {
+    margin-right: 0.6rem;
+  }
+
+  .plotConfig-container {
+    left: -80px;
+  }
+
+  .addProduct-container {
+    position: absolute;
+    left: -300px;
+    top: 18px;
+    width: 300px;
+  }
+}
