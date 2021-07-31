@@ -46,16 +46,16 @@ const updateProduct = async (product, recordInfo) => {
   const timeRef = Date.parse(product.createdAt);
   const timeNow = Date.now();
   const elapsedHours = (timeNow - timeRef) / 1000 / 3600;
-  const meanSells = recordInfo.totalSells / elapsedHours;
+  const meanSells = recordInfo.total_sells / elapsedHours;
   // checking product status
   const { status } = await getProductInfoFromML(product.ml_id);
   // setting default data structure
   updatedProductInfo = {
-    curr_total_sells: recordInfo.totalSells,
-    curr_total_visits: recordInfo.totalVisits,
+    curr_total_sells: recordInfo.total_sells,
+    curr_total_visits: recordInfo.total_visits,
     conversion_rate:
-      recordInfo.totalVisits !== 0
-        ? recordInfo.totalSells / recordInfo.totalVisits
+      recordInfo.total_visits !== 0
+        ? recordInfo.total_sells / recordInfo.total_visits
         : 0,
     mean_sells: meanSells,
     status,
@@ -66,6 +66,7 @@ const updateProduct = async (product, recordInfo) => {
     updatedProductInfo = { ...updatedProductInfo, ...catProductInfo };
   }
   // updating product
+  console.log(updatedProductInfo);
   await Product.update(updatedProductInfo, { where: { id: product.id } });
 };
 

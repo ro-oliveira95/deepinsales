@@ -58,7 +58,7 @@ cron.schedule("0 */1 * * *", async () => {
   await recordAllProducts(); // each 24h
 });
 
-// serve static assets in production
+// serve static assets in product ion
 if (process.env.NODE_ENV == "production") {
   // set static folder
   app.use(express.static("client/build"));
