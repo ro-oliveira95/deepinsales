@@ -84,6 +84,10 @@ function ProductList({
           dateA = a.curr_total_sells;
           dateB = b.curr_total_sells;
           break;
+        case "visits":
+          dateA = a.curr_total_visits;
+          dateB = b.curr_total_visits;
+          break;
         case "conversionRate":
           dateA = a.conversion_rate;
           dateB = b.conversion_rate;
@@ -160,6 +164,8 @@ function ProductList({
                   <i className='fas fa-exchange-alt'></i>
                 ) : listOrder == "sells" ? (
                   <i className='fas fa-shopping-cart'></i>
+                ) : listOrder == "visits" ? (
+                  <i className='fas fa-eye'></i>
                 ) : (
                   <i className='fas fa-sync-alt'></i>
                 )}
@@ -178,6 +184,13 @@ function ProductList({
                 >
                   <i className='fas fa-shopping-cart'></i>
                   <span>Vendas</span>
+                </div>
+                <div
+                  className='icon-dropdown icon-btn'
+                  onClick={() => setListOrder("visits")}
+                >
+                  <i className='fas fa-eye'></i>
+                  <span>Visitas</span>
                 </div>
                 <div
                   className='icon-dropdown icon-btn'

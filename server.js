@@ -54,7 +54,7 @@ cron.schedule("0 */1 * * *", async () => {
   let d = new Date();
   d = new Date(d.valueOf() - d.getTimezoneOffset() * 60000);
   console.log(`[${d.toGMTString()}] recording all products...`);
-  await updateCatalogueProducts(); // before recording products
+  // await updateCatalogueProducts(); // before recording products
   await recordAllProducts(); // each 24h
 });
 

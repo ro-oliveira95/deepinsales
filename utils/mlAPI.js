@@ -148,6 +148,27 @@ const getCatalogueProductInfoFromML = async (productID) => {
   return catalogueProductInfo;
 };
 
+const checkCatalogueInfo = async (product) => {
+  const prodInfo = await getCatalogueProductInfoFromML(product.catalogue_id);
+
+  let updatedProdInfo = { status: prodInfo.status };
+
+  // checking if current ad isn't buybox winner
+  if (prodInfo.buy_box_winner.item_id !== product.ml_id) {
+    const { item_id, seller_id, price } = prodInfo.buy_box_winner;
+    seller = await getSellerNicknameFromML(seller_id);
+
+    updatedProdInfo = {
+      ...updatedProdInfo,
+      ml_id: item_id,
+      seller,
+      price,
+    };
+  }
+
+  return updatedProdInfo;
+};
+
 const checkForUpdatesOnCatalogueProduct = async (product) => {
   const productInfo = await getCatalogueProductInfoFromML(product.catalogue_id);
 
@@ -178,4 +199,5 @@ module.exports = {
   getProductInfoFromML,
   getSellerNicknameFromML,
   checkForUpdatesOnCatalogueProduct,
+  checkCatalogueInfo,
 };

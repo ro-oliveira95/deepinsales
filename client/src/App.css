@@ -5,7 +5,7 @@
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
-  --hintbox-bg-color: rgb(39, 38, 38);
+  --hintbox-bg-color: #363535;
   --hintbox-border: 2px solid rgb(80, 122, 52);
 }
 
@@ -309,10 +309,10 @@ button {
 
 .categories-box {
   width: 100%;
-  height: 32px;
+  height: 28px;
   display: flex;
   justify-content: left;
-  border-bottom: 1px solid rgb(84, 84, 90);
+  border-bottom: 1px solid rgba(84, 84, 90, 0.5);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -343,12 +343,12 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 20px;
+  height: 18px;
   position: relative;
   font-size: 0.6rem;
   color: #fff;
   border-radius: 5px;
-  padding: 0.2rem 0.6rem;
+  padding: 0.15rem 0.4rem;
   margin: 0.3rem;
 }
 
@@ -522,21 +522,41 @@ button {
   width: 98%;
   /* background-color: rgb(75, 100, 100); */
   overflow-y: visible;
-  margin: 0 0 0.5rem 0;
-  padding: 0.5rem;
+  margin: 0 0 0.7rem 0;
+  padding: 0.4rem;
   border-radius: 7px;
   border: solid 1px rgb(105, 104, 104);
   /* background-color: rgba(230, 22, 22, 0.322); */
+}
+
+.item-container a {
+  height: 76px;
+  width: 76px;
+  margin: 0 0.5rem 0 0;
+}
+
+.item-container img {
+  height: 76px;
+  width: 76px;
+  /* margin-right: 0.5rem; */
 }
 
 .item-paused {
   border: solid 1.5px rgb(230, 22, 22);
 }
 
-.item-container img {
-  height: 90px;
-  width: 90px;
+.item-upper {
+  display: flex;
+}
+
+.item-upper img {
+  height: 65px;
+  width: 65px;
   margin-right: 0.5rem;
+}
+
+.item-upper-header-categories-container {
+  width: 100%;
 }
 
 .item-outer {
@@ -551,7 +571,7 @@ button {
 
 .item-header {
   width: 100%;
-  height: 29px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -598,7 +618,7 @@ button {
 
 .info-icon-text {
   display: inline;
-  font-size: 1.15rem;
+  font-size: 1rem;
   margin-left: 0.3rem;
 }
 
@@ -610,6 +630,10 @@ button {
 
 .product-details-expand-h {
   height: 100%;
+}
+
+.item-info-text {
+  font-size: 0.9rem;
 }
 
 .actions {
@@ -776,8 +800,8 @@ button {
   background-color: rgb(211, 59, 59);
   color: #ddd;
   border-radius: 0.2rem;
-  padding: 0.2rem 0.4rem;
-  font-size: 0.8rem;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.7rem;
 }
 
 /* Overlay */
@@ -839,6 +863,7 @@ button {
   z-index: 1;
   flex-direction: column;
   align-items: center;
+  border: 1px solid rgb(80, 122, 52);
 }
 
 /* Links inside the dropdown */
@@ -871,6 +896,9 @@ button {
 }
 
 @media only screen and (max-width: 800px) {
+  body {
+    background-color: rgb(37, 37, 37);
+  }
   .workarea {
     display: flex;
     flex-direction: column;

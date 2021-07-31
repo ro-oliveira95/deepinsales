@@ -1,8 +1,11 @@
 const { getImageURL, readSellsOnMlPage } = require("./scrapers");
-const { getVisits, checkForUpdatesOnCatalogueProduct } = require("./mlAPI");
+const {
+  getVisits,
+  checkForUpdatesOnCatalogueProduct,
+  checkCatalogueInfo,
+  getProductInfoFromML,
+} = require("./mlAPI");
 const { Product, SaleRecord } = require("../db/models");
-
-const axios = require("axios");
 
 const createRecord = async (recordInfo) => {
   try {
@@ -21,6 +24,7 @@ const gatherProductSellsAndCreateRecord = async (product) => {
     console.log(`Create reacord from ${product.name} failed`);
     return;
   }
+  // calculating basic metrics
   visits = visits[product.ml_id];
   const totalSells = sells - product.base_sells;
   const totalVisits = visits - product.base_visits;
@@ -31,22 +35,38 @@ const gatherProductSellsAndCreateRecord = async (product) => {
     daily_visits: totalVisits - product.curr_total_visits,
     product_id: product.id,
   };
+  // creating a record from current data and updating product
   await createRecord(recordInfo);
-  // calculating average sells/hour
+  await updateProduct(product, recordInfo);
+};
+
+const updateProduct = async (product, recordInfo) => {
+  let updatedProductInfo = {};
+  // calculating mean sells per hour
   const timeRef = Date.parse(product.createdAt);
   const timeNow = Date.now();
   const elapsedHours = (timeNow - timeRef) / 1000 / 3600;
-  const meanSells = totalSells / elapsedHours;
+  const meanSells = recordInfo.totalSells / elapsedHours;
+  // checking product status
+  const { status } = await getProductInfoFromML(product.ml_id);
+  // setting default data structure
+  updatedProductInfo = {
+    curr_total_sells: recordInfo.totalSells,
+    curr_total_visits: recordInfo.totalVisits,
+    conversion_rate:
+      recordInfo.totalVisits !== 0
+        ? recordInfo.totalSells / recordInfo.totalVisits
+        : 0,
+    mean_sells: meanSells,
+    status,
+  };
+  // checking if catalogue product info is out of date
+  if (product.is_buy_box) {
+    const catProductInfo = await checkCatalogueInfo(product);
+    updatedProductInfo = { ...updatedProductInfo, ...catProductInfo };
+  }
   // updating product
-  await Product.update(
-    {
-      curr_total_sells: totalSells,
-      curr_total_visits: totalVisits,
-      conversion_rate: totalVisits !== 0 ? totalSells / totalVisits : 0,
-      mean_sells: meanSells,
-    },
-    { where: { id: product.id } }
-  );
+  await Product.update(updatedProductInfo, { where: { id: product.id } });
 };
 
 const recordAllProducts = async () => {

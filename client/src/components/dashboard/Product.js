@@ -110,6 +110,10 @@ const Product = ({
         <p className='info-icon-text'>{product.curr_total_sells}</p>
       </div>
       <div>
+        <i className='fas fa-eye icon icon-colorful'></i>
+        <p className='info-icon-text'>{product.curr_total_visits}</p>
+      </div>
+      <div>
         <i className='fas fa-exchange-alt  icon icon-colorful'></i>
         {/* <i className='fas fa-eye icon icon-colorful'></i> */}
         <p className='info-icon-text'>
@@ -149,20 +153,24 @@ const Product = ({
       <div className='flex-col-space-left'>
         <div className='mg-b-2 flex-row'>
           <i className='fas fa-store mg-r-1 icon icon-colorful'></i>
-          <p>{product.seller}</p>
+          <p className='item-info-text'>{product.seller}</p>
         </div>
         <div className='mg-b-2 flex-row'>
           <i className='far fa-clock mg-r-1 icon icon-colorful'></i>
-          <p>{`${DateTime.fromISO(product.createdAt).toFormat("ff")}`}</p>
-          {/* {console.log(product.createdAt)} */}
+          <p className='item-info-text'>{`${DateTime.fromISO(
+            product.createdAt
+          ).toFormat("ff")}`}</p>
         </div>
       </div>
       <div className='flex-col-space-left'>
         <div className='mg-b-2 flex-row'>
           <i className='fas fa-money-bill mg-r-1 icon icon-colorful'></i>
-          <p>R${product.price}</p>
+          <p className='item-info-text'>R${product.price}</p>
         </div>
-        <p style={{ color: !product.is_buy_box && "#555" }}>
+        <p
+          className='item-info-text'
+          style={{ color: !product.is_buy_box && "#555" }}
+        >
           {true && "Buybox"}
         </p>
       </div>
@@ -175,6 +183,56 @@ const Product = ({
         product.status != "active" ? "item-paused" : ""
       }`}
     >
+      {/* <div className='item-upper'>
+        <a href={product.url} target='_blank'>
+          <img src={product.image_url} alt='produto' className='image-btn' />
+        </a>
+        <div className='item-upper-header-categories-container'>
+          <div className='item-header'>
+            <i
+              className={`fas fa-info icon icon-btn icon-header-product ${
+                isDetailsOpen ? "btn-icon-glow-green" : ""
+              }`}
+              style={{ marginRight: "5px" }}
+              onClick={() => toggleDetailsPopup(product.name)}
+            ></i>
+            <i
+              className={`fas fa-cog icon icon-btn icon-header-product ${
+                isConfigOpen ? "btn-icon-glow-green" : ""
+              }`}
+              onClick={() => toggleConfigPopup(product.name)}
+            ></i>
+            <p className='item-title'>
+              {product.name.length > 30
+                ? product.name.slice(0, 31).concat("...")
+                : product.name}
+            </p>
+            {product.status != "active" && (
+              <BsFillExclamationCircleFill className='icon-paused' />
+            )}
+            <i
+              className={`fas fa-chart-bar icon icon-btn icon-header-product ${
+                isPloted ? "btn-icon-glow" : ""
+              }`}
+              onClick={() => toggleItemVisibility(product)}
+            ></i>
+          </div>
+          {!isDetailsOpen && (
+            <div className='categories-box'>{categoriesList}</div>
+          )}
+        </div>
+      </div>
+      <div
+        className={`item-inner ${
+          isDetailsOpen && "product-details-expand-h mg-t-1"
+        }`}
+      >
+        {isConfigOpen
+          ? itemConfigContent
+          : isDetailsOpen
+          ? itemDetailsContent
+          : itemInfoContent}
+      </div> */}
       <a href={product.url} target='_blank'>
         <img src={product.image_url} alt='produto' className='image-btn' />
       </a>
@@ -193,9 +251,6 @@ const Product = ({
             }`}
             onClick={() => toggleConfigPopup(product.name)}
           ></i>
-          {/* <div className='item-header-icons-container'>
-          </div> */}
-          {/* <div className='dummy'>{isConfigOpen && configPopup}</div> */}
           <p className='item-title'>
             {product.name.length > 30
               ? product.name.slice(0, 31).concat("...")
@@ -226,7 +281,6 @@ const Product = ({
             ? itemDetailsContent
             : itemInfoContent}
         </div>
-        {/* </div> */}
       </div>
     </div>
   );
