@@ -66,7 +66,6 @@ const updateProduct = async (product, recordInfo) => {
     updatedProductInfo = { ...updatedProductInfo, ...catProductInfo };
   }
   // updating product
-  console.log(updatedProductInfo);
   await Product.update(updatedProductInfo, { where: { id: product.id } });
 };
 

@@ -1,40 +1,12 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useRef, useEffect } from "react";
 import { connect } from "react-redux";
-import { Line } from "react-chartjs-2";
+import { Line, Chart } from "react-chartjs-2";
 import "chartjs-adapter-luxon";
 import { DateTime as dt } from "luxon";
 import { loadRecords } from "../../actions/record";
 
 function Plot({ records, plot }) {
-  // useEffect(() => {
-  //   printData();
-  // });
-  // const printData = () => {
-  //   const dataset = records.records
-  //     .filter((saleRecord) => {
-  //       return plot.plotItems.includes(saleRecord.productId);
-  //       // saleRecord.record.length > 0
-  //     })
-  //     .filter((saleRecord) => {
-  //       return saleRecord.record.length > 0;
-  //     })
-  //     .sort((a, b) =>
-  //       a.last_nom > b.last_nom ? 1 : b.last_nom > a.last_nom ? -1 : 0
-  //     )
-  //     .map((saleRecord) => {
-  //       return {
-  //         label: saleRecord.productName,
-  //         data: saleRecord.record.map((value) => {
-  //           return { x: value.timestamp, y: value.total_sells };
-  //         }),
-  //         fill: false,
-  //         backgroundColor: `rgb(${saleRecord.color[0]}, ${saleRecord.color[1]}, ${saleRecord.color[2]})`,
-  //         borderColor: `rgb(${saleRecord.color[0]}, ${saleRecord.color[1]}, ${saleRecord.color[2]}, 0.2)`,
-  //         tension: 0.2,
-  //       };
-  //     });
-  //   console.log(dataset);
-  // };
+  const plotRef = useRef();
   const data = {
     datasets: records
       .filter((saleRecord) => {
@@ -65,10 +37,16 @@ function Plot({ records, plot }) {
       }),
   };
 
+  useEffect(() => {
+    console.log(plotRef);
+  }, []);
+
   return (
     <Fragment>
       <section className='container-plot'>
         <Line
+          type='line'
+          ref={plotRef}
           data={data}
           height={150}
           options={{
@@ -100,10 +78,10 @@ function Plot({ records, plot }) {
                 type: "time",
                 distribution: "linear",
                 time: {
-                  // unit: "day",
-                  displayFormats: {
-                    day: "DD",
-                  },
+                  unit: "day",
+                  // displayFormats: {
+                  //   day: "DD",
+                  // },
                 },
               },
             },
