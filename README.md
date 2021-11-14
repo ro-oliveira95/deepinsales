@@ -9,4 +9,4 @@ Here is a screenshot of the user's dashboard:\
 
 ### Version review
 This is a version 2 of the app. Version 1 was implemented without a frontend framework and had a poor backend architecture.
-The current version uses Node.js + Express on the backend, and Reac[t in the frontend. Future plans includes changuing the backend to Python (Flask or FastAPI) to extend data manipulation (and because I love Python :D).
+The current version uses Node.js + Express on the backend and React in the frontend. Future plans includes changuing the backend to Python (Flask or FastAPI) to extend data manipulation (and because I love Python :D).
