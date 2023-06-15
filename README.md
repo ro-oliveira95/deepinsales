@@ -18,6 +18,7 @@ Here is a screenshot of the user's dashboard:\
 - Data fetching from the plataform API
 - Webscrapper to get sells data (not available in the plataform API)
 - Scheduler to trigger scrapper and API token refresh
+- Basic filtering, searching and sorting (all client-side) saved ads
 
 ## Project status
 The app was shutdown because of eventual lack of usage by my friends and difficulty to maintain and expand by myself.\
