@@ -20,5 +20,5 @@ Here is a screenshot of the user's dashboard:\
 - Scheduler to trigger scrapper and API token refresh
 
 ## Project status
-The app was shutdown because of eventual lack of usage by my friends and difficult to maintain and expand by my self.\
+The app was shutdown because of eventual lack of usage by my friends and difficulty to maintain and expand by myself.\
 Still, the main purposes of this project was to learn and have fun, and this was accomplished with success :)
